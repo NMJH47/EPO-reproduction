@@ -60,7 +60,6 @@ We provide the exact commands which can be used to reproduce the performance of 
 
 ```
 
-```
 ## Acknowledgements
 This implementation builds upon the the following codebases - 
 1. [IsaacGymEnvs](https://github.com/isaac-sim/IsaacGymEnvs)
