@@ -18,7 +18,26 @@ WANDB_GROUP_VALUE="${WANDB_GROUP:-reorientation_epo64_N${NUM_ENVS}}"
 LOG_DIR="${EPO_LOG_DIR:-${ROOT_DIR}/logs/reproduction}"
 LOG_FILE="${EPO_LOG_FILE:-${LOG_DIR}/${EXPERIMENT}.log}"
 PID_FILE="${EPO_PID_FILE:-/tmp/${EXPERIMENT}.pid}"
-WANDB_RUN_URL="https://wandb.ai/${WANDB_ENTITY_VALUE}/${WANDB_PROJECT_VALUE}/runs/uid_${EXPERIMENT}"
+RUN_DIR="${ROOT_DIR}/runs/${EXPERIMENT}"
+WANDB_METADATA_FILE="${RUN_DIR}/wandb_run.json"
+WANDB_RESUME_VALUE="${WANDB_RESUME:-auto}"
+WANDB_RUN_ID_VALUE="${WANDB_RUN_ID:-}"
+
+wandb_run_url() {
+    if [[ ! -f "${WANDB_METADATA_FILE}" ]]; then
+        echo "pending:${WANDB_METADATA_FILE}"
+        return 0
+    fi
+
+    python3 - "${WANDB_METADATA_FILE}" <<'PY'
+import json
+import sys
+
+with open(sys.argv[1], "r") as metadata_file:
+    metadata = json.load(metadata_file)
+print(metadata.get("url") or f"run_id:{metadata.get('id', 'unknown')}")
+PY
+}
 
 is_running() {
     [[ -s "${PID_FILE}" ]] && kill -0 "$(cat "${PID_FILE}")" 2>/dev/null
@@ -42,14 +61,14 @@ show_status() {
         pid="$(cat "${PID_FILE}")"
         echo "RUNNING pid=${pid}"
         nvidia-smi --query-gpu=name,memory.used,memory.total,utilization.gpu --format=csv,noheader
-        echo "wandb=${WANDB_RUN_URL}"
+        echo "wandb=$(wandb_run_url)"
         echo "log=${LOG_FILE}"
         show_log_progress
         return 0
     fi
 
     echo "STOPPED"
-    echo "wandb=${WANDB_RUN_URL}"
+    echo "wandb=$(wandb_run_url)"
     echo "log=${LOG_FILE}"
     show_log_progress
     return 1
@@ -65,12 +84,22 @@ stop_run() {
     local pid
     pid="$(cat "${PID_FILE}")"
     echo "Stopping process group ${pid}..."
-    kill -TERM -- "-${pid}" 2>/dev/null || kill -TERM "${pid}" 2>/dev/null || true
+    kill -INT -- "-${pid}" 2>/dev/null || kill -INT "${pid}" 2>/dev/null || true
 
     for _ in $(seq 1 30); do
         if ! kill -0 "${pid}" 2>/dev/null; then
             rm -f "${PID_FILE}"
             echo "Stopped."
+            return 0
+        fi
+        sleep 1
+    done
+
+    kill -TERM -- "-${pid}" 2>/dev/null || kill -TERM "${pid}" 2>/dev/null || true
+    for _ in $(seq 1 15); do
+        if ! kill -0 "${pid}" 2>/dev/null; then
+            rm -f "${PID_FILE}"
+            echo "Stopped after SIGTERM."
             return 0
         fi
         sleep 1
@@ -90,10 +119,10 @@ case "${ACTION}" in
         stop_run
         exit 0
         ;;
-    start|foreground)
+    start|foreground|sync)
         ;;
     *)
-        echo "Usage: $0 [start|status|stop|foreground]" >&2
+        echo "Usage: $0 [start|status|stop|foreground|sync]" >&2
         exit 2
         ;;
 esac
@@ -121,6 +150,17 @@ fi
 "${CONDA_EXE}" run -n "${CONDA_ENV}" python -c \
     'import torch; assert torch.cuda.is_available(), "CUDA is unavailable"; print(torch.cuda.get_device_name(0))'
 
+if [[ "${ACTION}" == "sync" ]]; then
+    if [[ ! -d "${RUN_DIR}/wandb" ]]; then
+        echo "No local W&B data found under ${RUN_DIR}/wandb." >&2
+        exit 1
+    fi
+    while IFS= read -r -d '' run_path; do
+        "${CONDA_EXE}" run -n "${CONDA_ENV}" wandb sync "${run_path}"
+    done < <(find "${RUN_DIR}/wandb" -mindepth 1 -maxdepth 1 -type d -name 'run-*' -print0)
+    exit 0
+fi
+
 if [[ -z "${WANDB_ENTITY_VALUE}" ]]; then
     echo "WANDB_ENTITY must be set for online synchronization." >&2
     exit 1
@@ -141,6 +181,13 @@ CHECKPOINT="${EPO_CHECKPOINT:-}"
 if [[ -z "${CHECKPOINT}" && -f "${ROOT_DIR}/runs/${EXPERIMENT}/last/model.pth" ]]; then
     CHECKPOINT="${ROOT_DIR}/runs/${EXPERIMENT}/last/model.pth"
     echo "Auto-resuming from ${CHECKPOINT}"
+fi
+
+if [[ -n "${CHECKPOINT}" && -z "${WANDB_RUN_ID_VALUE}" && -f "${WANDB_METADATA_FILE}" ]]; then
+    WANDB_RUN_ID_VALUE="$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1])).get("id", ""))' "${WANDB_METADATA_FILE}")"
+fi
+if [[ -n "${WANDB_RUN_ID_VALUE}" ]]; then
+    WANDB_RESUME_VALUE=allow
 fi
 
 TRAIN_COMMAND=(
@@ -176,6 +223,8 @@ TRAIN_COMMAND=(
     "wandb_entity=${WANDB_ENTITY_VALUE}"
     "wandb_project=${WANDB_PROJECT_VALUE}"
     "wandb_group=${WANDB_GROUP_VALUE}"
+    wandb_mode=online
+    "wandb_resume=${WANDB_RESUME_VALUE}"
     "wandb_tags=[reproduction,epo64,reorientation,gpu_only,scaled_N${NUM_ENVS}]"
     "++wandb_notes=gpu_only_epo64_reorientation_original_N24576_local_N${NUM_ENVS}"
 )
@@ -186,6 +235,9 @@ if [[ -n "${CHECKPOINT}" ]]; then
         exit 1
     fi
     TRAIN_COMMAND+=("checkpoint=${CHECKPOINT}")
+fi
+if [[ -n "${WANDB_RUN_ID_VALUE}" ]]; then
+    TRAIN_COMMAND+=("wandb_run_id=${WANDB_RUN_ID_VALUE}")
 fi
 
 {
@@ -217,6 +269,6 @@ if ! kill -0 "${PID}" 2>/dev/null; then
 fi
 
 echo "Started ${EXPERIMENT} with pid ${PID}."
-echo "W&B: ${WANDB_RUN_URL}"
+echo "W&B: $(wandb_run_url)"
 echo "Log: ${LOG_FILE}"
 echo "Status: $0 status"

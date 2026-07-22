@@ -3,6 +3,18 @@ import sys
 
 from isaacgymenvs.pbt.launcher.run_description import Experiment, ParamGrid, RunDescription
 
+
+def parse_bool(value):
+    if isinstance(value, bool):
+        return value
+    normalized = value.strip().lower()
+    if normalized in {'1', 'true', 'yes', 'on'}:
+        return True
+    if normalized in {'0', 'false', 'no', 'off'}:
+        return False
+    raise ValueError(f'Expected a boolean value, received: {value}')
+
+
 def get_name_prefix_suffix(args):
     name_prefix = f'{args.env}_{args.task}' if args.env.startswith('allegro_kuka') else f'{args.env}'
     name_suffix = (f"{args.experiment_prefix}_" if args.experiment_prefix else  "") + f'{args.num_envs}envs'
@@ -34,7 +46,8 @@ def add_experiment_args(parser):
     parser.add_argument("--multi-gpu", action='store_true', help="Whether to use multi gpu")
     parser.add_argument("--max-iterations", default=None, type=int, help="Max iterations")
 
-    parser.add_argument("--wandb-activate", default=True, type=bool, help="Whether to activate wandb")
+    parser.add_argument("--wandb-activate", default=True, nargs='?', const=True, type=parse_bool, help="Whether to activate wandb")
+    parser.add_argument("--no-wandb-activate", dest='wandb_activate', action='store_false', help="Disable wandb")
     parser.add_argument("--wandb-entity", default="", type=str, help="Wandb entity")
     parser.add_argument("--wandb-project", default="sapg", type=str, help="Wandb project")
     parser.add_argument("--wandb-tags", default='[]', type=str, help="Wandb tags formatted as [t1,t2]")

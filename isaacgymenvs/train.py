@@ -30,6 +30,7 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 import os
+import signal
 import sys
 import hydra
 import yaml
@@ -71,6 +72,11 @@ def preprocess_train_config(cfg, config_dict):
 
     train_cfg['population_based_training'] = cfg.pbt.enabled
     train_cfg['pbt_idx'] = cfg.pbt.policy_idx if cfg.pbt.enabled else None
+    train_cfg['use_interval_summary_writer'] = bool(
+        train_cfg.get('use_interval_summary_writer', False)
+        or cfg.pbt.enabled
+        or cfg.wandb_activate
+    )
 
     train_cfg['full_experiment_name'] = cfg.get('full_experiment_name')
 
@@ -239,12 +245,31 @@ def launch_rlg_hydra(cfg: DictConfig, vec_env=None):
         experiment_dir = os.path.join('runs', cfg.train.params.config.name)
 
         os.makedirs(experiment_dir, exist_ok=True)
-        if not os.path.exists(os.path.join(experiment_dir, 'config.yaml')):
-            with open(os.path.join(experiment_dir, 'config.yaml'), 'w') as f:
-                f.write(OmegaConf.to_yaml(cfg))
-            with open(os.path.join(experiment_dir, 'cmd.txt'), 'w') as f:
-                f.write(' '.join(sys.argv))
+        config_text = OmegaConf.to_yaml(cfg)
+        command_text = ' '.join(sys.argv)
+        config_path = os.path.join(experiment_dir, 'config.yaml')
+        command_path = os.path.join(experiment_dir, 'cmd.txt')
 
+        if not os.path.exists(config_path):
+            with open(config_path, 'w') as config_file:
+                config_file.write(config_text)
+        if not os.path.exists(command_path):
+            with open(command_path, 'w') as command_file:
+                command_file.write(command_text)
+
+        with open(os.path.join(experiment_dir, 'config.latest.yaml'), 'w') as config_file:
+            config_file.write(config_text)
+        with open(os.path.join(experiment_dir, 'commands.log'), 'a') as command_file:
+            command_file.write(f'{datetime.now().astimezone().isoformat()} {command_text}\n')
+
+    previous_sigterm_handler = signal.getsignal(signal.SIGTERM)
+
+    def handle_sigterm(signum, _frame):
+        raise SystemExit(128 + signum)
+
+    signal.signal(signal.SIGTERM, handle_sigterm)
+    exit_code = 0
+    training_failed = False
     try:
         cfg_n_env = runner.run({
             'train': not cfg.test,
@@ -252,13 +277,19 @@ def launch_rlg_hydra(cfg: DictConfig, vec_env=None):
             'checkpoint': cfg.checkpoint,
             'sigma': cfg.sigma if cfg.sigma != '' else None
         })
-    except Exception:
-        if wandb_observer is not None:
-            wandb_observer.finish(exit_code=1)
+    except BaseException as exc:
+        training_failed = True
+        exit_code = exc.code if isinstance(exc, SystemExit) and isinstance(exc.code, int) else 1
         raise
-
-    if wandb_observer is not None:
-        wandb_observer.finish()
+    finally:
+        signal.signal(signal.SIGTERM, previous_sigterm_handler)
+        if wandb_observer is not None:
+            try:
+                wandb_observer.finish(exit_code=exit_code)
+            except Exception as exc:
+                if not training_failed:
+                    raise
+                print(f'W&B finalization also failed: {exc}')
     
     return cfg_n_env
 

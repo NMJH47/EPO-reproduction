@@ -36,5 +36,7 @@ saved_data*
 archive
 !visualization/wandb_utils.py
 !wandb_utils.py
+!scripts/validate_wandb_run.py
+!tests/test_wandb_reliability.py
 
 /isaacgym

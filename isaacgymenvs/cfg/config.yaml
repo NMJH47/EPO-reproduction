@@ -48,7 +48,16 @@ wandb_name: ${train.params.config.name}
 wandb_entity: ''
 wandb_project: 'isaacgymenvs'
 wandb_tags: []
-wandb_logcode_dir: '' 
+wandb_notes: ''
+wandb_job_type: 'train'
+wandb_mode: 'online'
+wandb_resume: 'auto'
+wandb_run_id: ''
+wandb_log_code: True
+wandb_log_diff: True
+wandb_sync_tensorboard: False
+wandb_logcode_dir: ''
+wandb_init_timeout: 120
 
 capture_video: False
 capture_video_freq: 1464
@@ -71,4 +80,3 @@ hydra:
   output_subdir: null
   run:
     dir: .
-

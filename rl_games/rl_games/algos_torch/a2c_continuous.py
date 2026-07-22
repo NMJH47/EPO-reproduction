@@ -42,6 +42,10 @@ class A2CAgent(a2c_common.ContinuousA2CBase):
         self.last_lr = float(self.last_lr)
         self.bound_loss_type = self.config.get('bound_loss_type', 'bound') # 'regularisation' or 'bound'
         self.optimizer = optim.Adam(self.model.parameters(), float(self.last_lr), eps=1e-08, weight_decay=self.weight_decay)
+        log_off_policy_grads_env = os.getenv('LOG_OFF_POLICY_GRADS', '').strip().lower()
+        self.log_off_policy_grads = bool(self.config.get('log_off_policy_grads', False)) or log_off_policy_grads_env in {
+            '1', 'true', 'yes', 'on'
+        }
 
         if self.has_central_value:
             cv_config = {
@@ -149,7 +153,10 @@ class A2CAgent(a2c_common.ContinuousA2CBase):
             else:
                 entropy_coef = self.entropy_coef
             
-            if os.getenv('LOG_OFF_POLICY_GRADS'):
+            collect_off_policy_diagnostics = (
+                self.log_off_policy_grads and input_dict.get('off_policy_mask') is not None
+            )
+            if collect_off_policy_diagnostics:
                 loss_arr = a_loss.unsqueeze(1) + 0.5 * c_loss * self.critic_coef - (entropy_coef*entropy).unsqueeze(1) + b_loss.unsqueeze(1) * self.bounds_loss_coef
                 off_policy_loss = torch.masked_select(loss_arr, input_dict['off_policy_mask'].unsqueeze(1)).sum() / len(input_dict['off_policy_mask'])
                 on_policy_loss = torch.masked_select(loss_arr, ~input_dict['off_policy_mask'].unsqueeze(1)).sum() / len(input_dict['off_policy_mask'])
@@ -169,7 +176,7 @@ class A2CAgent(a2c_common.ContinuousA2CBase):
 
         self.scaler.scale(loss).backward()
         #TODO: Refactor this ugliest code of they year
-        all_grads = self.trancate_gradients_and_step()
+        self.trancate_gradients_and_step()
 
         with torch.no_grad():
             reduce_kl = rnn_masks is None
@@ -189,25 +196,19 @@ class A2CAgent(a2c_common.ContinuousA2CBase):
         ratio = torch.exp(old_action_log_probs_batch - action_log_probs)
         contrib = torch.logical_and(ratio < 1.0 + curr_e_clip, ratio > 1.0 - curr_e_clip).float()
 
-        if os.getenv('LOG_OFF_POLICY_GRADS'):
+        extras = {'off_policy_diagnostics_valid': collect_off_policy_diagnostics}
+        if collect_off_policy_diagnostics:
             contrib_off = torch.masked_select(contrib, input_dict['off_policy_mask'])
             contrib_on = torch.masked_select(contrib, ~input_dict['off_policy_mask'])
             contrib_off = torch.nan_to_num(contrib_off.mean())
             contrib_on = torch.nan_to_num(contrib_on.mean())
         
-            extras = {
+            extras.update({
                 "off_policy_contrib" : contrib_off.item(),
                 "on_policy_contrib" : contrib_on.item(),
                 "off_policy_grads" : grads_off.detach().cpu(),
                 "on_policy_grads" : grads_on.detach().cpu(),
-            }
-        else:
-            extras = {
-                "on_policy_contrib" : contrib.mean().item(),
-                "off_policy_contrib" : 0,
-                "on_policy_grads" : all_grads.detach().cpu(),
-                "off_policy_grads" : torch.zeros_like(all_grads).cpu(),
-            }     
+            })
         if self.expl_type.startswith('mixed_expl'):
             bl_ids = self.intr_reward_coef_embd[::self.intr_coef_block_size, 0].reshape(-1,1)
             bl_idxs = torch.argmax((obs_batch[:,-self.intr_reward_coef_embd.shape[1]] == bl_ids).float(), dim=0)
@@ -257,4 +258,3 @@ class A2CAgent(a2c_common.ContinuousA2CBase):
             dist.all_reduce(all_grads, op=dist.ReduceOp.SUM)
         
         return all_grads
-

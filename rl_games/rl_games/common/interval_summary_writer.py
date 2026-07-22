@@ -15,8 +15,9 @@ class IntervalSummaryWriter:
     folders reached tens of gigabytes.
     """
 
-    def __init__(self, summary_writer, cfg):
-        self.experiment_start = time.time()
+    def __init__(self, summary_writer, cfg, time_fn=None):
+        self.time_fn = time_fn or time.time
+        self.experiment_start = self.time_fn()
 
         # prevents noisy summaries when experiments are restarted
         self.defer_summaries_sec = cfg.get('defer_summaries_sec', 5)
@@ -32,12 +33,12 @@ class IntervalSummaryWriter:
         self.writer = summary_writer
         self.last_write_for_tag = dict()
 
-    def _calc_interval(self):
+    def _calc_interval(self, now):
         """Write summaries more often in the beginning of the run."""
         if self.last_interval >= self.interval_sec_max:
             return self.last_interval
 
-        seconds_since_start = time.time() - self.experiment_start
+        seconds_since_start = now - self.experiment_start
         interval = seconds_since_start * self.summaries_relative_step
         interval = min(interval, self.interval_sec_max)
         interval = max(interval, self.interval_sec_min)
@@ -45,22 +46,30 @@ class IntervalSummaryWriter:
 
         return interval
 
-    def add_scalar(self, tag, value, step, *args, **kwargs):
+    def _should_write(self, tag, step):
         if step == 0:
-            # removes faulty summaries that appear after the experiment restart
-            # print('Skip summaries with step=0')
-            return
+            return False
 
-        seconds_since_start = time.time() - self.experiment_start
+        now = self.time_fn()
+        seconds_since_start = now - self.experiment_start
         if seconds_since_start < self.defer_summaries_sec:
-            return
+            return False
 
         last_write = self.last_write_for_tag.get(tag, 0)
-        seconds_since_last_write = time.time() - last_write
-        interval = self._calc_interval()
+        seconds_since_last_write = now - last_write
+        interval = self._calc_interval(now)
         if seconds_since_last_write >= interval:
+            self.last_write_for_tag[tag] = now
+            return True
+        return False
+
+    def add_scalar(self, tag, value, step, *args, **kwargs):
+        if self._should_write(tag, step):
             self.writer.add_scalar(tag, value, step, *args, **kwargs)
-            self.last_write_for_tag[tag] = time.time()
+
+    def add_histogram(self, tag, values, step, *args, **kwargs):
+        if self._should_write(tag, step):
+            self.writer.add_histogram(tag, values, step, *args, **kwargs)
 
     def __getattr__(self, attr):
         return getattr(self.writer, attr)

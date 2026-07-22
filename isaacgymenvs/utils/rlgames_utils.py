@@ -227,13 +227,11 @@ class RLGPUAlgoObserver(AlgoObserver):
                 self.writer.add_scalar(f'episode_cumulative_max/{key}_max', np.max(self.episode_cumulative_avg[key]), frame)
             self.new_finished_episodes = False
         
-        print('Frame: ', frame, end=' ')
         for k, v in self.direct_info.items():
-            print(f'{k}/frame', v, end=' ')
             self.writer.add_scalar(f'{k}/frame', v, frame)
-            self.writer.add_scalar(f'{k}/iter', v, frame)
-            self.writer.add_scalar(f'{k}/time', v, frame)
-        print()
+            self.writer.add_scalar(f'{k}/iter', v, epoch_num)
+            self.writer.add_scalar(f'{k}/time', v, total_time)
+        print(f'Frame: {frame} successes={self.direct_info.get("successes", "n/a")}')
 
 
 class EPOObserver(AlgoObserver):
@@ -474,13 +472,15 @@ class EPOObserver(AlgoObserver):
                 self.writer.add_scalar(f'episode_cumulative_max/{key}_max', np.max(self.episode_cumulative_avg[key]), frame)
             self.new_finished_episodes = False
         
-        print('Frame: ', frame, end=' ')
         for k, v in self.direct_info.items():
-            print(f'{k}/frame', v, end=' ')
             self.writer.add_scalar(f'{k}/frame', v, frame)
-            self.writer.add_scalar(f'{k}/iter', v, frame)
-            self.writer.add_scalar(f'{k}/time', v, frame)
-        print()
+            self.writer.add_scalar(f'{k}/iter', v, epoch_num)
+            self.writer.add_scalar(f'{k}/time', v, total_time)
+        print(
+            f'Frame: {frame} '
+            f'true_objective={self.direct_info.get("true_objective_mean", "n/a")} '
+            f'successes={self.direct_info.get("successes", "n/a")}'
+        )
 
 
 class MultiObserver(AlgoObserver):
@@ -504,6 +504,13 @@ class MultiObserver(AlgoObserver):
 
     def after_init(self, algo):
         self._call_multi('after_init', algo)
+
+    def wrap_summary_writer(self, writer):
+        for observer in self.observers:
+            wrap_summary_writer = getattr(observer, 'wrap_summary_writer', None)
+            if wrap_summary_writer is not None:
+                writer = wrap_summary_writer(writer)
+        return writer
 
     def process_infos(self, infos, done_indices, **kwargs):
         self._call_multi('process_infos', infos, done_indices, **kwargs)

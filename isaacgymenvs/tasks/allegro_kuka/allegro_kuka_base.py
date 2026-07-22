@@ -576,9 +576,13 @@ class AllegroKukaBase(VecTask):
             
             if isinstance(value, torch.Tensor):
                 self.__dict__[key].copy_(value)
+                print(
+                    f"Loaded env state value {key}: "
+                    f"shape={tuple(value.shape)} dtype={value.dtype} device={value.device}"
+                )
             else:
                 self.__dict__[key] = value
-            print(f"Loaded env state value {key}:{value}")
+                print(f"Loaded env state value {key}: {value}")
         
         print(self._extra_object_indices(None)[0][0].shape)
         self.arm_hand_dof_state = self.dof_state.view(self.num_envs, -1, 2)[:, : self.num_hand_arm_dofs]
