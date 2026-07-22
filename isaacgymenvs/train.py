@@ -38,6 +38,26 @@ from isaacgymenvs.utils.reformat import omegaconf_to_dict
 from omegaconf import DictConfig, OmegaConf, open_dict
 
 
+def configure_torch_jit_for_modern_gpus():
+    import torch
+
+    if not torch.cuda.is_available() or torch.version.cuda is None:
+        return
+
+    cuda_version = tuple(int(part) for part in torch.version.cuda.split(".")[:2])
+    device_capability = torch.cuda.get_device_capability()
+    disable_gpu_fusion = device_capability >= (8, 9) and cuda_version < (11, 8)
+    override_gpu_fusion = getattr(torch._C, "_jit_override_can_fuse_on_gpu", None)
+
+    if disable_gpu_fusion and override_gpu_fusion is not None:
+        override_gpu_fusion(False)
+        print(
+            "Disabled TorchScript GPU fusion because CUDA "
+            f"{torch.version.cuda} cannot compile for compute capability "
+            f"{device_capability[0]}.{device_capability[1]}"
+        )
+
+
 def preprocess_train_config(cfg, config_dict):
     """
     Adding common configuration parameters to the rl_games train config.
@@ -86,6 +106,7 @@ def launch_rlg_hydra(cfg: DictConfig, vec_env=None):
 
     # noinspection PyUnresolvedReferences
     import isaacgym
+    configure_torch_jit_for_modern_gpus()
     from isaacgymenvs.pbt.pbt import PbtAlgoObserver, initial_pbt_check
     from isaacgymenvs.utils.rlgames_utils import multi_gpu_get_rank
     from hydra.utils import to_absolute_path
@@ -191,13 +212,10 @@ def launch_rlg_hydra(cfg: DictConfig, vec_env=None):
         pbt_observer = PbtAlgoObserver(cfg)
         observers.append(pbt_observer)
 
-    # ! for debug
-    # if cfg.wandb_activate:
-    #     cfg.seed += global_rank
-    #     if global_rank == 0:
-    #         # initialize wandb only once per multi-gpu run
-    #         wandb_observer = WandbAlgoObserver(cfg)
-    #         observers.append(wandb_observer)
+    wandb_observer = None
+    if cfg.wandb_activate and global_rank == 0:
+        wandb_observer = WandbAlgoObserver(cfg)
+        observers.append(wandb_observer)
 
     # register new AMP network builder and agent
     def build_runner(algo_observer):
@@ -227,12 +245,20 @@ def launch_rlg_hydra(cfg: DictConfig, vec_env=None):
             with open(os.path.join(experiment_dir, 'cmd.txt'), 'w') as f:
                 f.write(' '.join(sys.argv))
 
-    cfg_n_env = runner.run({
-        'train': not cfg.test,
-        'play': cfg.test,
-        'checkpoint': cfg.checkpoint,
-        'sigma': cfg.sigma if cfg.sigma != '' else None
-    })
+    try:
+        cfg_n_env = runner.run({
+            'train': not cfg.test,
+            'play': cfg.test,
+            'checkpoint': cfg.checkpoint,
+            'sigma': cfg.sigma if cfg.sigma != '' else None
+        })
+    except Exception:
+        if wandb_observer is not None:
+            wandb_observer.finish(exit_code=1)
+        raise
+
+    if wandb_observer is not None:
+        wandb_observer.finish()
     
     return cfg_n_env
 
@@ -253,7 +279,12 @@ if __name__ == "__main__":
         vec_env = None
         while True:
             cfg_n_env = launch_rlg_hydra(cfg, vec_env)
-            if not isinstance(cfg_n_env, tuple):
+            is_pbt_restart = (
+                isinstance(cfg_n_env, tuple)
+                and len(cfg_n_env) == 2
+                and isinstance(cfg_n_env[0], DictConfig)
+            )
+            if not is_pbt_restart:
                 break
             cfg, vec_env = cfg_n_env
             vec_env.change_on_restart(omegaconf_to_dict(cfg.task))
