@@ -1,0 +1,12 @@
+title = "EPO secret scanning policy"
+
+[extend]
+useDefault = true
+
+[[allowlists]]
+description = "Isaac Gym keypoint target variables are not API credentials"
+targetRules = ["generic-api-key"]
+condition = "AND"
+regexTarget = "line"
+regexes = ['''\bself\.keypoint[1-4](?:_targ)?\b''']
+paths = ['''^isaacgymenvs/tasks/factory/factory_task_nut_bolt_screw\.py$''']
