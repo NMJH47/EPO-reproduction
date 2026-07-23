@@ -197,6 +197,13 @@ class A2CAgent(a2c_common.ContinuousA2CBase):
         contrib = torch.logical_and(ratio < 1.0 + curr_e_clip, ratio > 1.0 - curr_e_clip).float()
 
         extras = {'off_policy_diagnostics_valid': collect_off_policy_diagnostics}
+        if self.last_latent_grad_norm is not None:
+            extras.update({
+                'latent_grad_norm': self.last_latent_grad_norm,
+                'latent_update_norm': self.last_latent_update_norm,
+                'optimizer_owns_gene': self.last_optimizer_owns_gene,
+                'orphan_parameter_count': self.last_orphan_parameter_count,
+            })
         if collect_off_policy_diagnostics:
             contrib_off = torch.masked_select(contrib, input_dict['off_policy_mask'])
             contrib_on = torch.masked_select(contrib, ~input_dict['off_policy_mask'])

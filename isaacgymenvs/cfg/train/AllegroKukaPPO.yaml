@@ -93,6 +93,7 @@ params:
     expl_coef_block_size: 4096
 
     epo: False
+    offspring_adam_state: zero # zero, parent_mean, retain
 
     player:
       #render: True

@@ -8,6 +8,7 @@ from rl_games.algos_torch.d2rl import D2RLNet
 from rl_games.algos_torch.sac_helper import  SquashedNormal
 from rl_games.common.layers.recurrent import  GRUWithDones, LSTMWithDones
 from rl_games.common.layers.value import  TwoHotEncodedValue, DefaultValue
+from rl_games.common.evolution_optimizer import merge_policy_gene_rows_
 
 
 def _create_initializer(func, **kwargs):
@@ -477,24 +478,7 @@ class A2CBuilder(NetworkBuilder):
                     return mu, mu*0 + sigma, value, states
                     
         def merge_extra_params(self, merged_policies, replaced_policy):
-            # Ensure that merged_policies contains exactly two policies
-            assert len(merged_policies) == 2, "merged_policies should contain exactly two policies"
-            print('parmas of replaced_policy:', self.extra_params[replaced_policy])
-            print('parmas of merged_policies[0]:', self.extra_params[merged_policies[0]])
-            print('parmas of merged_policies[1]:', self.extra_params[merged_policies[1]])
-            # Calculate the average of the extra_params of the two merged policies
-            merged_params = ((self.extra_params[merged_policies[0]] + self.extra_params[merged_policies[1]]) / 2)
-
-            # print('merged_params:', merged_params)
-            # Replace the extra_params of the replaced_policy with the merged_params
-            extra_params_copy = self.extra_params.detach().clone()
-            extra_params_copy[replaced_policy] = merged_params
-
-            self.extra_params = nn.Parameter(extra_params_copy, requires_grad=True)
-
-            print('merged_params:', self.extra_params[replaced_policy])
-            # assert False
-            return
+            return merge_policy_gene_rows_(self.extra_params, merged_policies, replaced_policy)
 
         def cluster_extra_params(self):
             """
@@ -543,10 +527,8 @@ class A2CBuilder(NetworkBuilder):
             
         
         def eliminate_extra_params(self, best_policy, eliminated_policy):
-            extra_params_copy = self.extra_params.detach().clone()
-            extra_params_copy[eliminated_policy] = extra_params_copy[best_policy]
-
-            self.extra_params = nn.Parameter(extra_params_copy, requires_grad=True)
+            with torch.no_grad():
+                self.extra_params[eliminated_policy].copy_(self.extra_params[best_policy])
 
             return
         
@@ -1081,4 +1063,3 @@ class SACBuilder(NetworkBuilder):
             else:
                 self.is_discrete = False
                 self.is_continuous = False
-

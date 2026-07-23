@@ -13,6 +13,11 @@ from rl_games.common.custom_utils import create_sinusoidal_encoding, filter_lead
 from rl_games.common.experience import ExperienceBuffer
 from rl_games.common.interval_summary_writer import IntervalSummaryWriter
 from rl_games.common.diagnostics import DefaultDiagnostics, PpoDiagnostics
+from rl_games.common.evolution_optimizer import (
+    get_epo_gene_parameter,
+    optimizer_contains_parameter,
+    optimizer_orphan_parameter_count,
+)
 from rl_games.algos_torch import  model_builder
 from rl_games.interfaces.base_algorithm import  BaseAlgorithm
 import numpy as np
@@ -352,6 +357,21 @@ class A2CBase(BaseAlgorithm):
         
 
     def trancate_gradients_and_step(self):
+        gene_parameter = get_epo_gene_parameter(self.model)
+        gene_before_step = None
+        optimizer_owns_gene = None
+        orphan_parameter_count = None
+        if gene_parameter is not None:
+            optimizer_owns_gene = optimizer_contains_parameter(self.optimizer, gene_parameter)
+            orphan_parameter_count = optimizer_orphan_parameter_count(self.optimizer, self.model)
+            if not optimizer_owns_gene or orphan_parameter_count:
+                raise RuntimeError(
+                    "EPO gene optimizer invariant failed before optimizer step: "
+                    f"optimizer_owns_gene={optimizer_owns_gene}, "
+                    f"orphan_parameter_count={orphan_parameter_count}"
+                )
+            gene_before_step = gene_parameter.detach().clone()
+
         if self.multi_gpu:
             # batch allreduce ops: see https://github.com/entity-neural-network/incubator/pull/220
             all_grads_list = []
@@ -373,8 +393,29 @@ class A2CBase(BaseAlgorithm):
             self.scaler.unscale_(self.optimizer)
             nn.utils.clip_grad_norm_(self.model.parameters(), self.grad_norm)
 
+        if gene_parameter is not None and gene_parameter.grad is not None:
+            latent_grad_norm = gene_parameter.grad.detach().float().norm()
+            if not self.truncate_grads and self.scaler.is_enabled():
+                latent_grad_norm = latent_grad_norm / self.scaler.get_scale()
+            self.last_latent_grad_norm = latent_grad_norm.item()
+        elif gene_parameter is not None:
+            self.last_latent_grad_norm = 0.0
+        else:
+            self.last_latent_grad_norm = None
+
         self.scaler.step(self.optimizer)
         self.scaler.update()
+
+        if gene_parameter is not None:
+            self.last_latent_update_norm = (
+                gene_parameter.detach() - gene_before_step
+            ).float().norm().item()
+            self.last_optimizer_owns_gene = float(optimizer_owns_gene)
+            self.last_orphan_parameter_count = orphan_parameter_count
+        else:
+            self.last_latent_update_norm = None
+            self.last_optimizer_owns_gene = None
+            self.last_orphan_parameter_count = None
 
     def load_networks(self, params):
         builder = model_builder.ModelBuilder()
@@ -1390,6 +1431,10 @@ class ContinuousA2CBase(A2CBase):
             'on_policy_grads' : [],
             'off_policy_grads' : [],
             'entropies' : [],
+            'latent_grad_norms' : [],
+            'latent_update_norms' : [],
+            'optimizer_owns_gene' : [],
+            'orphan_parameter_count' : [],
             'mb_intr_rewards' : ps_extras['mb_intr_rewards'],
             'mb_extr_rewards' :ps_extras['rewards']
         }
@@ -1406,6 +1451,11 @@ class ContinuousA2CBase(A2CBase):
                     extra_infos['off_policy_grads'].append(extras['off_policy_grads'])
                 if 'entropies' in extras:
                     extra_infos['entropies'].append(extras['entropies'])
+                if 'latent_grad_norm' in extras:
+                    extra_infos['latent_grad_norms'].append(extras['latent_grad_norm'])
+                    extra_infos['latent_update_norms'].append(extras['latent_update_norm'])
+                    extra_infos['optimizer_owns_gene'].append(extras['optimizer_owns_gene'])
+                    extra_infos['orphan_parameter_count'].append(extras['orphan_parameter_count'])
                 a_losses.append(a_loss)
                 c_losses.append(c_loss)
                 ep_kls.append(kl)
@@ -1565,6 +1615,28 @@ class ContinuousA2CBase(A2CBase):
 
                 if len(b_losses) > 0:
                     self.writer.add_scalar('losses/bounds_loss', torch_ext.mean_list(b_losses).item(), frame)
+
+                if extra_infos['latent_grad_norms']:
+                    self.writer.add_scalar(
+                        'evolution/latent_grad_norm',
+                        np.mean(extra_infos['latent_grad_norms']),
+                        frame,
+                    )
+                    self.writer.add_scalar(
+                        'evolution/latent_update_norm',
+                        np.mean(extra_infos['latent_update_norms']),
+                        frame,
+                    )
+                    self.writer.add_scalar(
+                        'evolution/optimizer_owns_gene',
+                        min(extra_infos['optimizer_owns_gene']),
+                        frame,
+                    )
+                    self.writer.add_scalar(
+                        'evolution/orphan_parameter_count',
+                        max(extra_infos['orphan_parameter_count']),
+                        frame,
+                    )
 
                 if self.has_soft_aug:
                     self.writer.add_scalar('losses/aug_loss', np.mean(aug_losses), frame)

@@ -41,6 +41,13 @@ from isaacgymenvs.pbt.pbt import PbtAlgoObserver
 
 from isaacgymenvs.tasks import isaacgym_task_map
 from rl_games.common.custom_utils import policy_block_means, rank_follower_policies, remove_envs_from_info
+from rl_games.common.evolution_optimizer import (
+    adam_row_moment_norm,
+    optimizer_contains_parameter,
+    optimizer_orphan_parameter_count,
+    update_offspring_adam_state_,
+    validate_offspring_adam_state,
+)
 from isaacgymenvs.utils.utils import set_seed, flatten_dict
 
 from omegaconf import DictConfig
@@ -273,6 +280,9 @@ class EPOObserver(AlgoObserver):
         # EPO params (fixed for now)
         self.interval_steps = 20000000
         self.warm_up_steps = 200000000
+        self.offspring_adam_state = validate_offspring_adam_state(
+            str(cfg.train.params.config.get('offspring_adam_state', 'zero'))
+        )
 
 
     def after_init(self, algo):
@@ -369,10 +379,47 @@ class EPOObserver(AlgoObserver):
         self.writer.add_scalar('evolution/parent_policy_1', best_policies[1], env_frames)
         self.writer.add_scalar('evolution/replaced_policy', worst_policy, env_frames)
      
-        # Eliminate the worst policy
-        for i in range(1):
-            worst_policy = policies[-1-i]
-            self.algo.model.a2c_network.merge_extra_params(best_policies, worst_policy)
+        network = self.algo.model.a2c_network
+        gene_parameter = network.extra_params
+        gene_parameter_id = id(gene_parameter)
+        optimizer_owns_gene = optimizer_contains_parameter(self.algo.optimizer, gene_parameter)
+        orphan_parameter_count = optimizer_orphan_parameter_count(self.algo.optimizer, self.algo.model)
+        if not optimizer_owns_gene or orphan_parameter_count:
+            raise RuntimeError(
+                "EPO gene optimizer invariant failed before crossover: "
+                f"optimizer_owns_gene={optimizer_owns_gene}, "
+                f"orphan_parameter_count={orphan_parameter_count}"
+            )
+
+        child_moment_norm_before = adam_row_moment_norm(
+            self.algo.optimizer,
+            gene_parameter,
+            worst_policy,
+        )
+        network.merge_extra_params(best_policies, worst_policy)
+        if id(network.extra_params) != gene_parameter_id:
+            raise RuntimeError("EPO crossover replaced the gene Parameter instead of updating it in place")
+
+        _, child_moment_norm_after = update_offspring_adam_state_(
+            self.algo.optimizer,
+            gene_parameter,
+            best_policies,
+            worst_policy,
+            self.offspring_adam_state,
+        )
+        optimizer_owns_gene = optimizer_contains_parameter(self.algo.optimizer, network.extra_params)
+        orphan_parameter_count = optimizer_orphan_parameter_count(self.algo.optimizer, self.algo.model)
+        if not optimizer_owns_gene or orphan_parameter_count:
+            raise RuntimeError(
+                "EPO gene optimizer invariant failed after crossover: "
+                f"optimizer_owns_gene={optimizer_owns_gene}, "
+                f"orphan_parameter_count={orphan_parameter_count}"
+            )
+
+        self.writer.add_scalar('evolution/optimizer_owns_gene', float(optimizer_owns_gene), env_frames)
+        self.writer.add_scalar('evolution/orphan_parameter_count', orphan_parameter_count, env_frames)
+        self.writer.add_scalar('evolution/child_moment_norm_before', child_moment_norm_before, env_frames)
+        self.writer.add_scalar('evolution/child_moment_norm_after', child_moment_norm_after, env_frames)
 
         # reset best_objective_curr_iteration_per_block
         self.best_objective_curr_iteration_per_block = [_UNINITIALIZED_VALUE] *self.num_agent
