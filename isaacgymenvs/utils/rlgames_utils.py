@@ -40,7 +40,7 @@ from rl_games.common.algo_observer import AlgoObserver
 from isaacgymenvs.pbt.pbt import PbtAlgoObserver
 
 from isaacgymenvs.tasks import isaacgym_task_map
-from rl_games.common.custom_utils import remove_envs_from_info
+from rl_games.common.custom_utils import policy_block_means, rank_follower_policies, remove_envs_from_info
 from isaacgymenvs.utils.utils import set_seed, flatten_dict
 
 from omegaconf import DictConfig
@@ -251,12 +251,24 @@ class EPOObserver(AlgoObserver):
 
         # EPO
         self.best_embeddings = True
-        self.num_agent = cfg.task.env.numEnvs // cfg.train.params.config.expl_coef_block_size
+        self.num_envs = int(cfg.task.env.numEnvs)
+        self.policy_block_size = int(cfg.train.params.config.expl_coef_block_size)
+        if self.policy_block_size <= 0:
+            raise ValueError("expl_coef_block_size must be positive")
+        if self.num_envs % self.policy_block_size != 0:
+            raise ValueError("numEnvs must be divisible by expl_coef_block_size")
+        self.num_agent = self.num_envs // self.policy_block_size
+        if self.num_agent < 3:
+            raise ValueError("EPO requires a master and at least two followers")
+        self.master_policy_idx = self.num_agent - 1
         self.sapg_iteration = -1
 
         self.finished_agents = set()
         self.last_target_objectives = None
         self.best_objective_curr_iteration: Optional[float] = None
+        self.curr_target_objective_value_per_block = [_UNINITIALIZED_VALUE] * self.num_agent
+        self.best_objective_curr_iteration_per_block = [_UNINITIALIZED_VALUE] * self.num_agent
+        self.target_objective_known = False
 
         # EPO params (fixed for now)
         self.interval_steps = 20000000
@@ -266,6 +278,40 @@ class EPOObserver(AlgoObserver):
     def after_init(self, algo):
         self.algo = algo
         self.writer = self.algo.writer
+
+    def _process_true_objective_fitness(self, infos, done_indices):
+        true_objective = infos['true_objective']
+        if true_objective.ndim != 1 or true_objective.shape[0] != self.num_envs:
+            raise ValueError(
+                f"true_objective must have shape ({self.num_envs},), got {tuple(true_objective.shape)}"
+            )
+
+        if self.last_target_objectives is None:
+            print("Initializing last_target_objectives")
+            print("all keys in infos: ", infos.keys())
+            self.last_target_objectives = [_UNINITIALIZED_VALUE] * self.num_envs
+
+        done_indices_flat = done_indices.reshape(-1).to(dtype=torch.long)
+        done_indices_lst = done_indices_flat.detach().cpu().tolist()
+        completed_objectives = true_objective.index_select(
+            0,
+            done_indices_flat.to(device=true_objective.device),
+        ).detach().cpu().tolist()
+        self.finished_agents.update(done_indices_lst)
+        for done_idx, objective in zip(done_indices_lst, completed_objectives):
+            self.last_target_objectives[done_idx] = objective
+
+        self.target_objective_known = len(self.finished_agents) >= self.num_envs
+        if not self.target_objective_known:
+            return
+
+        self.curr_target_objective_value = float(np.mean(self.last_target_objectives))
+        block_means = policy_block_means(
+            self.last_target_objectives,
+            self.num_agent,
+            self.policy_block_size,
+        )
+        self.curr_target_objective_value_per_block = [float(value) for value in block_means]
     
     def after_steps(self):
         '''Called after each step of the algorithm.
@@ -300,12 +346,9 @@ class EPOObserver(AlgoObserver):
             return
 
 
-        policies = list(range(self.num_agent))
         best_objective_curr_iteration_per_block = self.best_objective_curr_iteration_per_block
-        policies_sorted = sorted(zip(best_objective_curr_iteration_per_block, policies), reverse=True)
-
-        objectives = [obj for obj, _ in policies_sorted]
-        policies = [pol for _, pol in policies_sorted]
+        policies = rank_follower_policies(best_objective_curr_iteration_per_block, self.master_policy_idx)
+        objectives = [best_objective_curr_iteration_per_block[policy_idx] for policy_idx in policies]
         best_policies = policies[:2]
         worst_policy = policies[-1]
 
@@ -319,6 +362,12 @@ class EPOObserver(AlgoObserver):
         self.writer.add_scalar('auxiliary/objective_std', objective_std, env_frames)
         self.writer.add_scalar('auxiliary/objective_delta', objective_delta, env_frames)
         self.writer.add_scalar('auxiliary/objective_skewness', objective_skewness, env_frames)
+        for policy_idx, objective in enumerate(best_objective_curr_iteration_per_block):
+            self.writer.add_scalar(f'evolution/fitness/policy_{policy_idx}', objective, env_frames)
+        self.writer.add_scalar('evolution/master_policy_idx', self.master_policy_idx, env_frames)
+        self.writer.add_scalar('evolution/parent_policy_0', best_policies[0], env_frames)
+        self.writer.add_scalar('evolution/parent_policy_1', best_policies[1], env_frames)
+        self.writer.add_scalar('evolution/replaced_policy', worst_policy, env_frames)
      
         # Eliminate the worst policy
         for i in range(1):
@@ -354,18 +403,8 @@ class EPOObserver(AlgoObserver):
         assert isinstance(infos, dict), 'RLGPUAlgoObserver expects dict info'
         if not isinstance(infos, dict):
             return
-        
-        
-        
-        if self.best_embeddings and self.last_target_objectives == None:
-            # init
-            print("Initializing last_target_objectives")
-            # all keys in infos
-            print("all keys in infos: ", infos.keys())
-            self.last_target_objectives = [_UNINITIALIZED_VALUE] * (infos['true_objective'].shape[0] - kwargs.get("ignore_env_boundary", 0))
-            # breakpoint()
-            self.curr_target_objective_value_per_block = [_UNINITIALIZED_VALUE] *self.num_agent
-            self.best_objective_curr_iteration_per_block = [_UNINITIALIZED_VALUE] * self.num_agent
+        if self.best_embeddings and 'true_objective' in infos:
+            self._process_true_objective_fitness(infos, done_indices)
 
         if kwargs.get("ignore_env_boundary", 0) > 0:
             infos = remove_envs_from_info(copy.deepcopy(infos), kwargs["ignore_env_boundary"])
@@ -413,25 +452,6 @@ class EPOObserver(AlgoObserver):
         if 'true_objective' in infos:
             self.direct_info['true_objective_mean'] = infos['true_objective'].mean()
             self.direct_info['true_objective_max'] = infos['true_objective'].max()
-            if self.best_embeddings:
-                done_indices_lst = done_indices.squeeze(-1).tolist()
-                self.finished_agents.update(done_indices_lst)
-                # print("done indices list: ", done_indices_lst)
-
-                for done_idx in done_indices_lst:
-                    true_objective_value = infos["true_objective"][done_idx].item()
-                    self.last_target_objectives[done_idx] = true_objective_value
-
-                # # last result for all episodes
-                b_size = infos['true_objective'].shape[0] // self.num_agent
-                self.target_objective_known = len(self.finished_agents) >= len(self.last_target_objectives)
-                # print("!!!!!! known: ", self.target_objective_known, self.finished_agents, len(self.last_target_objectives))
-                if self.target_objective_known:
-                # print("update true objective")
-                # breakpoint()
-                    self.curr_target_objective_value = float(np.mean(self.last_target_objectives))
-                    for i in range(self.num_agent):
-                        self.curr_target_objective_value_per_block[i] = float(np.mean(self.last_target_objectives[i*b_size:(i+1)*b_size]))
         else:
             # environment does not specify "true objective", use regular reward
             # in this case, be careful not to include reward shaping coefficients into the mutation config

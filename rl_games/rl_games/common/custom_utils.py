@@ -1,6 +1,44 @@
 import numpy as np
 import torch
 
+
+def policy_block_means(values, num_policies, block_size):
+    if num_policies <= 0:
+        raise ValueError("num_policies must be positive")
+    if block_size <= 0:
+        raise ValueError("block_size must be positive")
+
+    expected_size = num_policies * block_size
+
+    if isinstance(values, torch.Tensor):
+        if values.ndim != 1:
+            raise ValueError("policy objectives must be one-dimensional")
+        if values.numel() != expected_size:
+            raise ValueError(f"expected {expected_size} policy objectives, got {values.numel()}")
+        return values.reshape(num_policies, block_size).mean(dim=1)
+
+    values = np.asarray(values)
+    if values.ndim != 1:
+        raise ValueError("policy objectives must be one-dimensional")
+    if values.size != expected_size:
+        raise ValueError(f"expected {expected_size} policy objectives, got {values.size}")
+    return values.reshape(num_policies, block_size).mean(axis=1)
+
+
+def rank_follower_policies(policy_fitness, master_policy_idx):
+    num_policies = len(policy_fitness)
+    if num_policies < 3:
+        raise ValueError("EPO requires a master and at least two followers")
+    if not 0 <= master_policy_idx < num_policies:
+        raise ValueError("master_policy_idx is outside the policy population")
+
+    follower_policies = [policy_idx for policy_idx in range(num_policies) if policy_idx != master_policy_idx]
+    return sorted(
+        follower_policies,
+        key=lambda policy_idx: (float(policy_fitness[policy_idx]), policy_idx),
+        reverse=True,
+    )
+
 def swap_and_flatten01(arr):
     """
     swap and then flatten axes 0 and 1
