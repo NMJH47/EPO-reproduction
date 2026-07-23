@@ -5,6 +5,7 @@ from omegaconf import OmegaConf
 
 from isaacgymenvs.utils.rlgames_utils import EPOObserver
 from rl_games.common.custom_utils import filter_leader, policy_block_means, rank_follower_policies
+from rl_games.common.evolution_optimizer import merge_policy_gene_rows_
 
 
 pytestmark = pytest.mark.skipif(not torch.cuda.is_available(), reason="CUDA GPU is required")
@@ -129,21 +130,30 @@ def test_after_steps_never_selects_or_replaces_master_policy():
         def add_scalar(self, tag, value, step):
             self.scalars[tag] = (value, step)
 
-    class RecordingNetwork:
+    class RecordingNetwork(torch.nn.Module):
         def __init__(self):
-            self.extra_params = torch.arange(4, dtype=torch.float32, device="cuda:0")
+            super().__init__()
+            self.extra_params = torch.nn.Parameter(
+                torch.arange(4, dtype=torch.float32, device="cuda:0").reshape(4, 1)
+            )
             self.merge_calls = []
 
         def merge_extra_params(self, parents, replaced_policy):
             self.merge_calls.append((list(parents), replaced_policy))
+            return merge_policy_gene_rows_(self.extra_params, parents, replaced_policy)
+
+    class RecordingModel(torch.nn.Module):
+        def __init__(self):
+            super().__init__()
+            self.a2c_network = RecordingNetwork()
 
     class FakeAlgo:
         def __init__(self):
             self.frame = 200_000_000
             self.device = torch.device("cuda:0")
             self.writer = RecordingWriter()
-            self.model = type("FakeModel", (), {})()
-            self.model.a2c_network = RecordingNetwork()
+            self.model = RecordingModel()
+            self.optimizer = torch.optim.Adam(self.model.parameters(), lr=0.1)
 
     cfg = OmegaConf.create(
         {
@@ -152,6 +162,7 @@ def test_after_steps_never_selects_or_replaces_master_policy():
         }
     )
     observer = EPOObserver(cfg)
+    assert observer.offspring_adam_state == "retain"
     algo = FakeAlgo()
     observer.after_init(algo)
     observer.sapg_iteration = 9
@@ -165,3 +176,7 @@ def test_after_steps_never_selects_or_replaces_master_policy():
     assert algo.writer.scalars["evolution/parent_policy_0"] == (0, 200_000_000)
     assert algo.writer.scalars["evolution/parent_policy_1"] == (1, 200_000_000)
     assert algo.writer.scalars["evolution/replaced_policy"] == (2, 200_000_000)
+    assert algo.writer.scalars["evolution/optimizer_owns_gene"] == (1.0, 200_000_000)
+    assert algo.writer.scalars["evolution/orphan_parameter_count"] == (0, 200_000_000)
+    assert algo.writer.scalars["evolution/child_moment_norm_before"] == (0.0, 200_000_000)
+    assert algo.writer.scalars["evolution/child_moment_norm_after"] == (0.0, 200_000_000)
