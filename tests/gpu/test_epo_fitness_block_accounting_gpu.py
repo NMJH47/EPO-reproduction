@@ -162,6 +162,7 @@ def test_after_steps_never_selects_or_replaces_master_policy():
         }
     )
     observer = EPOObserver(cfg)
+    assert observer.offspring_adam_state == "retain"
     algo = FakeAlgo()
     observer.after_init(algo)
     observer.sapg_iteration = 9

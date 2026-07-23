@@ -281,7 +281,7 @@ class EPOObserver(AlgoObserver):
         self.interval_steps = 20000000
         self.warm_up_steps = 200000000
         self.offspring_adam_state = validate_offspring_adam_state(
-            str(cfg.train.params.config.get('offspring_adam_state', 'zero'))
+            str(cfg.train.params.config.get('offspring_adam_state', 'retain'))
         )
 
 
