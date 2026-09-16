@@ -85,6 +85,9 @@ params:
     good_reset_boundary: ${if:${....task.env.goodResetBoundary},${....task.env.goodResetBoundary},0}
     use_others_experience: 'none' # 'none', 'all', 'lead_foll'
     off_policy_ratio: 1.0
+    off_policy_actor_coef: 1.0
+    off_policy_critic_coef: 0.0
+    off_policy_support_mode: actor_clip
 
     expl_type: 'none' # 'none', 'mixed_expl', 'mixed_expl_disjoint'
     expl_reward_coef_embd_size: 32

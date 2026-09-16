@@ -79,3 +79,6 @@ Schulman, J., Wolski, F., Dhariwal, P., Radford, A., & Klimov, O. (2017). Proxim
 Singla, Jayesh and Agarwal, Ananye and Pathak, Deepak. (2024). SAPG: Split and Aggregate Policy Gradients. ArXiv, abs/2407.20230.
 
 </small></small>
+# 本分支的实验版本
+
+本分支保存历史完整评估最高的frontier 2B实验；源码、配置、checkpoint和结果依据见[实验版本说明](EXPERIMENT_VERSION.md)。

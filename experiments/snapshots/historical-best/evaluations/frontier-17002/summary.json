@@ -1,0 +1,38 @@
+{
+  "action_clip_fraction": 0.6653851482628295,
+  "action_clip_step_fraction": 1.0,
+  "actual_environment_control_frames": 4664922,
+  "adapter_plan_sha256": "aac2f0c37fa3bf5f854a40edc4be1c46573fb2a1634a3dcf915634d53b1d3edf",
+  "censored_count": 0,
+  "env_step_attempts": 4926,
+  "env_step_attempts_without_return": 0,
+  "env_step_returns": 4926,
+  "episode_count": 947,
+  "episodes_sha256": "9a3e5f9dee66a3ead7e6f1f7899ebb95f92c58bc7a7b096b78be1c89260e4949",
+  "gene_assignment_validated": true,
+  "gene_summaries": {
+    "63": {
+      "assigned_episodes": 947,
+      "cap_fraction_lower_bound": 0.7296726504751848,
+      "censor_fraction": 0.0,
+      "censored_episodes": 0,
+      "completed_episodes": 947,
+      "completed_only_mean_successes": 41.66525871172122,
+      "mean_successes": 41.66525871172122,
+      "mean_successes_lower_bound": 41.66525871172122,
+      "mean_successes_upper_bound": 41.66525871172122
+    }
+  },
+  "global_control_steps": 4926,
+  "normalizer_unchanged": true,
+  "peak_torch_allocated_bytes": 264704,
+  "peak_torch_reserved_bytes": 2097152,
+  "physical_count_scope": "947 environments per actual env.step return, including later episodes; unreturned calls have unknown additional cost.",
+  "resource_journal_closed": true,
+  "resource_samples": 21,
+  "resource_sampling_scope": "NVML whole GPU0 memory and process RSS/HWM, host available RAM and disk; startup/250 returned steps/terminal samples, not continuous peaks or energy; stops before native summary/publication.",
+  "source_training_run_id": "f18cf118ea3744d3",
+  "statistical_scope": "diagnostic conditional on one checkpoint and one training seed; no training-seed CI",
+  "unreturned_step_may_have_advanced_physics": false,
+  "wall_seconds": 130.17639954801416
+}

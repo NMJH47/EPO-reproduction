@@ -1,0 +1,24 @@
+{
+  "checkpoint": "/home/ubuntu22/EPO-experiments/frontier-20260914/runs/112_long_frontier_seed36001_N20480/nn/milestone_new_frames_2000158720.pth",
+  "checkpoint_sha256": "29f3b33d2b0d80daa923aa9dc65538d3f1220e204f91e05d253878277b85276c",
+  "entity": "leo-ucbm-university-of-california-berkeley",
+  "eval_seed": 17001,
+  "evaluator_source": "/home/ubuntu22/EPO-experiments/frontier-20260914/scripts/evaluate_frozen_checkpoint.py",
+  "execution_ready": true,
+  "execution_root": "/home/ubuntu22/EPO-experiments/frontier-20260914",
+  "files_sha256": {
+    "/home/ubuntu22/EPO-experiments/frontier-20260914/_research_support/cache_boundary_hooks.py": "9279f86626adab941f001ce0b433d6745ad2379fe79821ce71f35e2c89809802",
+    "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260914-long-budget/training/frontier/executed_training_config.yaml": "bc4d9fcd445a992693014b15cab915586a68c8381a8ab6c977b6d973fcd00a62",
+    "/home/ubuntu22/EPO-experiments/frontier-20260914/scripts/evaluate_frozen_checkpoint.py": "677ced2d8475fbf5a1f553bd3e8ff46ae65ecefcca815acb40b60569abee8b82",
+    "/home/ubuntu22/EPO-experiments/frontier-20260914/scripts/research/run_dapo_evaluation.py": "806d922ec6ecc920378bf9868e594bc26889734a9d13969fa5009b1148ecaa35"
+  },
+  "group": "epo-long-budget-frontier-20260914",
+  "nvml_source": "/home/ubuntu22/EPO-experiments/frontier-20260914/_research_support/cache_boundary_hooks.py",
+  "output": "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260914-long-budget/evaluations/frontier-6104-17001",
+  "project": "EPO-reproduction",
+  "purpose": "dapo_frozen_master_evaluation",
+  "run_id": "2e55763639924629",
+  "source_training_run_id": "f18cf118ea3744d3",
+  "train_config": "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260914-long-budget/training/frontier/executed_training_config.yaml",
+  "train_config_sha256": "bc4d9fcd445a992693014b15cab915586a68c8381a8ab6c977b6d973fcd00a62"
+}

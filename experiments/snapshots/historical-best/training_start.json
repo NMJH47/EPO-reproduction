@@ -1,0 +1,21 @@
+{
+  "actual_backend_flags": {
+    "cudnn_allow_tf32": true,
+    "cudnn_benchmark": true,
+    "cudnn_deterministic": false,
+    "matmul_allow_tf32": true
+  },
+  "backend_boundary": "After native Runner/set_seed/agent construction and optional full restore",
+  "epoch": 15259,
+  "frame": 5000069120,
+  "gene_owned": false,
+  "gene_requires_grad": true,
+  "mode": "e51",
+  "optimizer_lrs": [
+    7.707346629258935e-05
+  ],
+  "optimizer_state_entries": 17,
+  "restore_returned": true,
+  "scale": 131072.0,
+  "scope": "Native simulator created in this process; not historical trajectory replay"
+}

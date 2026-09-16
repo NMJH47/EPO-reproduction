@@ -11,6 +11,134 @@ import torch
 import torch.distributed as dist 
 
 
+def optimizer_contains_parameter(optimizer, parameter):
+    return any(
+        candidate is parameter
+        for param_group in optimizer.param_groups
+        for candidate in param_group['params']
+    )
+
+
+def remove_parameter_from_optimizer(optimizer, parameter):
+    removed = False
+    for param_group in optimizer.param_groups:
+        retained = [
+            candidate
+            for candidate in param_group['params']
+            if candidate is not parameter
+        ]
+        if len(retained) != len(param_group['params']):
+            param_group['params'] = retained
+            removed = True
+    optimizer.state.pop(parameter, None)
+    return removed
+
+
+def off_policy_importance_diagnostics(old_neglogp, new_neglogp, off_policy_mask, clip):
+    selected_log_ratio = torch.masked_select(
+        old_neglogp - new_neglogp,
+        off_policy_mask,
+    ).detach()
+    if selected_log_ratio.numel() == 0:
+        return None
+
+    finite_fraction = torch.isfinite(selected_log_ratio).float().mean()
+    safe_log_ratio = torch.nan_to_num(
+        selected_log_ratio,
+        nan=0.0,
+        posinf=20.0,
+        neginf=-20.0,
+    ).clamp(-20.0, 20.0)
+    weights = torch.exp(safe_log_ratio)
+    normalized_ess = weights.sum().square() / (
+        weights.numel() * weights.square().sum().clamp_min(1e-12)
+    )
+    clip_fraction = torch.logical_or(
+        weights < 1.0 - clip,
+        weights > 1.0 + clip,
+    ).float().mean()
+    return {
+        'off_policy_ratio_ess': normalized_ess,
+        'off_policy_ratio_clip_fraction': clip_fraction,
+        'off_policy_log_ratio_abs_mean': safe_log_ratio.abs().mean(),
+        'off_policy_log_ratio_finite_fraction': finite_fraction,
+    }
+
+
+def off_policy_training_weights(
+    old_neglogp,
+    new_neglogp,
+    off_policy_mask,
+    clip,
+    actor_coef=1.0,
+    critic_coef=1.0,
+    support_mode='none',
+):
+    if actor_coef < 0.0:
+        raise ValueError("off_policy_actor_coef must be non-negative")
+    if critic_coef < 0.0:
+        raise ValueError("off_policy_critic_coef must be non-negative")
+    if support_mode not in {'none', 'actor_clip'}:
+        raise ValueError(f"unsupported off-policy support mode: {support_mode}")
+
+    actor_weights = torch.ones_like(new_neglogp).detach()
+    critic_weights = torch.ones_like(new_neglogp).detach()
+    result = {
+        'actor': actor_weights,
+        'critic': critic_weights,
+        'diagnostics': None,
+        'weight_diagnostics': {},
+    }
+    if off_policy_mask is None:
+        return result
+
+    flat_off_policy_mask = off_policy_mask.reshape(-1).bool()
+    if flat_off_policy_mask.numel() != actor_weights.numel():
+        raise ValueError("off_policy_mask must match the flattened PPO batch")
+    if not flat_off_policy_mask.any():
+        return result
+
+    diagnostics = off_policy_importance_diagnostics(
+        old_neglogp,
+        new_neglogp,
+        flat_off_policy_mask,
+        clip,
+    )
+    selected_actor_weights = torch.full_like(
+        torch.masked_select(actor_weights, flat_off_policy_mask),
+        actor_coef,
+    )
+    if support_mode == 'actor_clip':
+        selected_log_ratio = torch.masked_select(
+            old_neglogp - new_neglogp,
+            flat_off_policy_mask,
+        ).detach()
+        selected_ratio = torch.exp(
+            torch.nan_to_num(
+                selected_log_ratio,
+                nan=0.0,
+                posinf=20.0,
+                neginf=-20.0,
+            ).clamp(-20.0, 20.0)
+        )
+        selected_actor_weights *= torch.logical_and(
+            selected_ratio >= 1.0 - clip,
+            selected_ratio <= 1.0 + clip,
+        ).float()
+
+    actor_weights[flat_off_policy_mask] = selected_actor_weights
+    critic_weights[flat_off_policy_mask] = critic_coef
+    result.update({
+        'diagnostics': diagnostics,
+        'weight_diagnostics': {
+            'off_policy_actor_effective_weight': selected_actor_weights.mean(),
+            'off_policy_critic_effective_weight': critic_weights[flat_off_policy_mask].mean(),
+            'off_policy_actor_support_fraction': (selected_actor_weights > 0.0).float().mean(),
+        },
+    })
+    return result
+
+
 class A2CAgent(a2c_common.ContinuousA2CBase):
 
     def __init__(self, base_name, params):
@@ -46,6 +174,15 @@ class A2CAgent(a2c_common.ContinuousA2CBase):
         self.log_off_policy_grads = bool(self.config.get('log_off_policy_grads', False)) or log_off_policy_grads_env in {
             '1', 'true', 'yes', 'on'
         }
+        self.off_policy_actor_coef = float(self.config.get('off_policy_actor_coef', 1.0))
+        self.off_policy_critic_coef = float(self.config.get('off_policy_critic_coef', 1.0))
+        self.off_policy_support_mode = str(self.config.get('off_policy_support_mode', 'none'))
+        if self.off_policy_actor_coef < 0.0:
+            raise ValueError("off_policy_actor_coef must be non-negative")
+        if self.off_policy_critic_coef < 0.0:
+            raise ValueError("off_policy_critic_coef must be non-negative")
+        if self.off_policy_support_mode not in {'none', 'actor_clip'}:
+            raise ValueError(f"unsupported off-policy support mode: {self.off_policy_support_mode}")
 
         if self.has_central_value:
             cv_config = {
@@ -89,6 +226,39 @@ class A2CAgent(a2c_common.ContinuousA2CBase):
         checkpoint = torch_ext.load_checkpoint(fn)
         self.set_full_state_weights(checkpoint[self.global_rank] if self.global_rank in checkpoint else checkpoint, set_epoch=set_epoch)
 
+    def get_full_state_weights(self):
+        state = super().get_full_state_weights()
+        network = self.model.a2c_network
+        if hasattr(network, 'extra_params'):
+            state['epo_gene_trainable'] = network.extra_params.requires_grad
+            state['epo_gene_optimizer_active'] = optimizer_contains_parameter(
+                self.optimizer,
+                network.extra_params,
+            )
+        return state
+
+    def set_full_state_weights(self, weights, set_epoch=True):
+        network = self.model.a2c_network
+        if (
+            hasattr(network, 'extra_params')
+            and not bool(weights.get('epo_gene_optimizer_active', True))
+        ):
+            self.disable_gene_optimizer_updates()
+        super().set_full_state_weights(weights, set_epoch=set_epoch)
+        if hasattr(network, 'extra_params'):
+            network.set_extra_params_trainable(
+                bool(weights.get('epo_gene_trainable', True))
+            )
+
+    def disable_gene_optimizer_updates(self):
+        network = self.model.a2c_network
+        if not hasattr(network, 'extra_params'):
+            return False
+        return remove_parameter_from_optimizer(
+            self.optimizer,
+            network.extra_params,
+        )
+
     def get_masked_action_values(self, obs, action_masks):
         assert False
 
@@ -100,6 +270,7 @@ class A2CAgent(a2c_common.ContinuousA2CBase):
         old_sigma_batch = input_dict['sigma']
         return_batch = input_dict['returns']
         actions_batch = input_dict['actions']
+        off_policy_mask = input_dict.get('off_policy_mask')
         obs_batch = input_dict['obs']
         obs_batch = self._preproc_obs(obs_batch)
 
@@ -129,10 +300,21 @@ class A2CAgent(a2c_common.ContinuousA2CBase):
             mu = res_dict['mus']
             sigma = res_dict['sigmas']
 
+            training_weights = off_policy_training_weights(
+                old_action_log_probs_batch,
+                action_log_probs,
+                off_policy_mask,
+                curr_e_clip,
+                actor_coef=self.off_policy_actor_coef,
+                critic_coef=self.off_policy_critic_coef,
+                support_mode=self.off_policy_support_mode,
+            )
             a_loss = self.actor_loss_func(old_action_log_probs_batch, action_log_probs, advantage, self.ppo, curr_e_clip)
+            a_loss = a_loss * training_weights['actor']
 
             if self.has_value_loss:
                 c_loss = common_losses.critic_loss(self.model,value_preds_batch, values, curr_e_clip, return_batch, self.clip_value)
+                c_loss = c_loss * training_weights['critic'].unsqueeze(1)
             else:
                 c_loss = torch.zeros((len(values), 1), device=self.ppo_device)
             if self.bound_loss_type == 'regularisation':
@@ -197,6 +379,35 @@ class A2CAgent(a2c_common.ContinuousA2CBase):
         contrib = torch.logical_and(ratio < 1.0 + curr_e_clip, ratio > 1.0 - curr_e_clip).float()
 
         extras = {'off_policy_diagnostics_valid': collect_off_policy_diagnostics}
+        if off_policy_mask is not None:
+            diagnostics = training_weights['diagnostics']
+            if diagnostics is not None:
+                extras.update({
+                    name: value.item()
+                    for name, value in diagnostics.items()
+                })
+            extras.update({
+                name: value.item()
+                for name, value in training_weights['weight_diagnostics'].items()
+            })
+
+            sample_kl = torch_ext.policy_kl(
+                mu.detach(),
+                sigma.detach(),
+                old_mu_batch,
+                old_sigma_batch,
+                reduce=False,
+            )
+            valid_mask = torch.ones_like(sample_kl, dtype=torch.bool)
+            if rnn_masks is not None:
+                valid_mask &= rnn_masks.reshape(-1).bool()
+            flat_off_policy_mask = off_policy_mask.reshape(-1).bool()
+            on_policy_kl = sample_kl[valid_mask & ~flat_off_policy_mask]
+            off_policy_kl = sample_kl[valid_mask & flat_off_policy_mask]
+            if on_policy_kl.numel() > 0:
+                extras['on_policy_behavior_kl'] = on_policy_kl.mean().item()
+            if off_policy_kl.numel() > 0:
+                extras['off_policy_behavior_kl'] = off_policy_kl.mean().item()
         if collect_off_policy_diagnostics:
             contrib_off = torch.masked_select(contrib, input_dict['off_policy_mask'])
             contrib_on = torch.masked_select(contrib, ~input_dict['off_policy_mask'])

@@ -1013,6 +1013,7 @@ class AllegroKukaBase(VecTask):
         self.reset_buf[:] = resets
 
         self.extras["successes"] = self.prev_episode_successes
+        self.extras["current_episode_successes"] = self.successes
         self.extras["closest_keypoint_max_dist"] = self.prev_episode_closest_keypoint_max_dist
         self.true_objective = self._true_objective()
         self.extras["true_objective"] = self.true_objective

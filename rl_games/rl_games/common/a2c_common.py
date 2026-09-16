@@ -1389,6 +1389,15 @@ class ContinuousA2CBase(A2CBase):
             'off_policy_contrib' : [],
             'on_policy_grads' : [],
             'off_policy_grads' : [],
+            'off_policy_ratio_ess' : [],
+            'off_policy_ratio_clip_fraction' : [],
+            'off_policy_log_ratio_abs_mean' : [],
+            'off_policy_log_ratio_finite_fraction' : [],
+            'on_policy_behavior_kl' : [],
+            'off_policy_behavior_kl' : [],
+            'off_policy_actor_effective_weight' : [],
+            'off_policy_critic_effective_weight' : [],
+            'off_policy_actor_support_fraction' : [],
             'entropies' : [],
             'mb_intr_rewards' : ps_extras['mb_intr_rewards'],
             'mb_extr_rewards' :ps_extras['rewards']
@@ -1404,6 +1413,19 @@ class ContinuousA2CBase(A2CBase):
                     extra_infos['on_policy_grads'].append(extras['on_policy_grads'])
                     extra_infos['off_policy_contrib'].append(extras['off_policy_contrib'])
                     extra_infos['off_policy_grads'].append(extras['off_policy_grads'])
+                for diagnostic in (
+                    'off_policy_ratio_ess',
+                    'off_policy_ratio_clip_fraction',
+                    'off_policy_log_ratio_abs_mean',
+                    'off_policy_log_ratio_finite_fraction',
+                    'on_policy_behavior_kl',
+                    'off_policy_behavior_kl',
+                    'off_policy_actor_effective_weight',
+                    'off_policy_critic_effective_weight',
+                    'off_policy_actor_support_fraction',
+                ):
+                    if diagnostic in extras:
+                        extra_infos[diagnostic].append(extras[diagnostic])
                 if 'entropies' in extras:
                     extra_infos['entropies'].append(extras['entropies'])
                 a_losses.append(a_loss)
@@ -1612,6 +1634,24 @@ class ContinuousA2CBase(A2CBase):
                         self.writer.add_scalar('auxiliary_stats/off_on_grad_similarity', grad_similarity, frame)
                         self.writer.add_scalar('auxiliary_stats/off_on_relative_grad_norms', relative_grad_norm, frame)
 
+                    for diagnostic in (
+                        'off_policy_ratio_ess',
+                        'off_policy_ratio_clip_fraction',
+                        'off_policy_log_ratio_abs_mean',
+                        'off_policy_log_ratio_finite_fraction',
+                        'on_policy_behavior_kl',
+                        'off_policy_behavior_kl',
+                        'off_policy_actor_effective_weight',
+                        'off_policy_critic_effective_weight',
+                        'off_policy_actor_support_fraction',
+                    ):
+                        if extra_infos[diagnostic]:
+                            self.writer.add_scalar(
+                                f'auxiliary_stats/{diagnostic}',
+                                np.mean(extra_infos[diagnostic]),
+                                frame,
+                            )
+
                     # log sigma of action
                     self.writer.add_scalar('auxiliary_stats/sigma', torch_ext.mean_list(csigmas).item(), frame)
 
@@ -1702,9 +1742,3 @@ class ContinuousA2CBase(A2CBase):
                 should_exit = should_exit_t.float().item()
             if should_exit:
                 return self.last_mean_rewards, epoch_num
-
-            if should_exit:
-                return self.last_mean_rewards, epoch_num
-
-            # print("Epoch done")
-            # time.sleep(3)

@@ -1,0 +1,176 @@
+{
+  "actual_adam_updates": 48813,
+  "arm": "frontier",
+  "completed_epochs": 6104,
+  "counts": {
+    "actor_attempts": 48832,
+    "actor_returns": 48832,
+    "adam_entered": 48813,
+    "adam_exceptions": 0,
+    "adam_returned": 48813,
+    "env_step_attempts": 97664,
+    "env_step_returns": 97664,
+    "epoch_entries": 6104,
+    "epoch_returns": 6104,
+    "ga_merge_calls": 94,
+    "ga_merge_returns": 94,
+    "gene_disable_calls": 95,
+    "gene_disable_returns": 95,
+    "history_releases": 6104,
+    "lr_calls": 12208,
+    "lr_returns": 12208,
+    "prepare_returns": 6104,
+    "resource_samples": 54936,
+    "scheduler_calls": 12208,
+    "scheduler_returns": 12208
+  },
+  "curriculum": {
+    "active_proposals": 43295559,
+    "catalog_sha256": "f13ef6da90b8b1cb2ca5c98b902d9aec2fc2de50ef595b6475af4cb2217de407",
+    "cohorts_deferred": 0,
+    "cohorts_merged": 94,
+    "complete_new_episode_endings": 1231942,
+    "completed_epochs": 6104,
+    "control_steps": 97664,
+    "eligible_at_close_cumulative": 45463053,
+    "enabled": true,
+    "first_error": null,
+    "ga_notifications": 94,
+    "goal_births": 45512484,
+    "goal_cancelled": 0,
+    "goal_failure": 529548,
+    "goal_pending": 19997,
+    "goal_success": 44962939,
+    "inherited_episode_closures": 20465,
+    "inherited_goal_closures": 20046,
+    "native_coordinate_rounding_bin_changes": 3,
+    "new_episode_births": 1252405,
+    "new_episode_cancelled": 0,
+    "new_episode_pending": 20463,
+    "new_finished_env_count": 20480,
+    "new_physical_frames": 2000158720,
+    "oldest_unfinished_env_age_steps": 0,
+    "q_nonuniform": true,
+    "q_teacher_version": 91,
+    "raw_done_events": 1252407,
+    "resume_supported": false,
+    "schema": 1,
+    "status": "observing",
+    "teacher_computations": 91,
+    "teacher_eligible_pending": 19997,
+    "teacher_invalidated_births": 916803,
+    "teacher_smoothed_proxy_at_q_version": {
+      "continuation": {
+        "kl_q_to_uniform": 0.0020332116863636396,
+        "max_bin_probability": 0.12141224131494893,
+        "min_bin_probability": 0.10045815744404028,
+        "q_weighted_success_proxy": 0.9833204307832726,
+        "uniform_weighted_success_proxy": 0.9834046139176887
+      },
+      "initial": {
+        "kl_q_to_uniform": 0.0002162180513513377,
+        "max_bin_probability": 0.11549631350503581,
+        "min_bin_probability": 0.10715011229960116,
+        "q_weighted_success_proxy": 0.922826850379076,
+        "uniform_weighted_success_proxy": 0.9229312267573189
+      }
+    },
+    "teacher_updates": 91
+  },
+  "effective_exit_code": 0,
+  "env_step_attempts_without_return": 0,
+  "errors": [],
+  "failed_raw_scope": "Closed files uploaded; unconfirmed-open TB retained locally for post-exit parent archive",
+  "finite_scope": "Live model/RMS/actual Adam after original terminal save; no checkpoint reload",
+  "incomplete_step_scope": "A failed env_step may have advanced simulation before returning; internal partial physics unknown",
+  "intervention": "Shared frontier target-position proposal; native actor/critic losses",
+  "last_resource": {
+    "boundary": "after_native_epoch_return",
+    "disk_free_bytes": 36433022976,
+    "driver_free_bytes": 5845745664,
+    "driver_total_bytes": 17171480576,
+    "driver_used_bytes": 11325734912
+  },
+  "milestone_checkpoints": [
+    {
+      "epoch": 15565,
+      "frame": 5100339200,
+      "identity": {
+        "md5": "XPFE3qV+u30RF8LudABAtg==",
+        "sha256": "1b3b48a9b54882f96e685fe8c11b0f552e75c1c2add06dc6ccacf6a8376d3e3e",
+        "size": 252652569
+      },
+      "new_frames": 100270080,
+      "path": "/home/ubuntu22/EPO-experiments/frontier-20260914/runs/112_long_frontier_seed36001_N20480/nn/milestone_new_frames_100270080.pth",
+      "relative_epoch": 306
+    },
+    {
+      "epoch": 16785,
+      "frame": 5500108800,
+      "identity": {
+        "md5": "5eYSdATtgrzmC2SCFuQU8w==",
+        "sha256": "116c741c188abfebf8ec4b02a0d27b2b77106a74e48343f7d9458c7fc9c7343e",
+        "size": 252655065
+      },
+      "new_frames": 500039680,
+      "path": "/home/ubuntu22/EPO-experiments/frontier-20260914/runs/112_long_frontier_seed36001_N20480/nn/milestone_new_frames_500039680.pth",
+      "relative_epoch": 1526
+    },
+    {
+      "epoch": 18311,
+      "frame": 6000148480,
+      "identity": {
+        "md5": "EUasUP0lB/7eVNy6N3JGWw==",
+        "sha256": "e42e8b048f0db89b331a6444a9bb3f03417c074db96448d554fa508e82e7c175",
+        "size": 252657753
+      },
+      "new_frames": 1000079360,
+      "path": "/home/ubuntu22/EPO-experiments/frontier-20260914/runs/112_long_frontier_seed36001_N20480/nn/milestone_new_frames_1000079360.pth",
+      "relative_epoch": 3052
+    },
+    {
+      "epoch": 21363,
+      "frame": 7000227840,
+      "identity": {
+        "md5": "C5axdJtJah9pVPmsjcQJCw==",
+        "sha256": "29f3b33d2b0d80daa923aa9dc65538d3f1220e204f91e05d253878277b85276c",
+        "size": 252663321
+      },
+      "new_frames": 2000158720,
+      "path": "/home/ubuntu22/EPO-experiments/frontier-20260914/runs/112_long_frontier_seed36001_N20480/nn/milestone_new_frames_2000158720.pth",
+      "relative_epoch": 6104
+    }
+  ],
+  "mode": "e51",
+  "native_exit_code": 0,
+  "native_writer_closed": true,
+  "observed_epoch_wall_seconds": 42136.49020537792,
+  "original_core_fps": 47501.42246583438,
+  "original_core_seconds": 42107.34365773201,
+  "physical_frames": 2000158720,
+  "physical_frames_returned_lower_bound": 2000158720,
+  "planned_epochs": 6104,
+  "primary_error": null,
+  "resource_scope": "Post-return samples only, not continuous free-memory guarantee",
+  "seed": 36001,
+  "start_frame": 5000069120,
+  "status": "completed",
+  "status_scope": "Native quotas and closed payload validation before final upload/finish; parent actual wait and fresh API still required",
+  "stopping_policy": "Fixed complete budget only; no early efficacy gate",
+  "suppressed_saves": 491,
+  "target_frame": 7000227840,
+  "terminal_checkpoint": {
+    "epoch": 21363,
+    "frame": 7000227840,
+    "identity": {
+      "md5": "C5axdJtJah9pVPmsjcQJCw==",
+      "sha256": "29f3b33d2b0d80daa923aa9dc65538d3f1220e204f91e05d253878277b85276c",
+      "size": 252663321
+    },
+    "new_frames": 2000158720,
+    "path": "/home/ubuntu22/EPO-experiments/frontier-20260914/runs/112_long_frontier_seed36001_N20480/nn/milestone_new_frames_2000158720.pth",
+    "relative_epoch": 6104
+  },
+  "timing_scope": "Native core and observed epoch wall; process wait/monitor window separately owned by parent",
+  "unknown_additional_control_frames_upper_bound": 0
+}

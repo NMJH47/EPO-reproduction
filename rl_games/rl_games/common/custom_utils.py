@@ -1,6 +1,49 @@
 import numpy as np
 import torch
 
+
+def policy_block_means(values, num_policies, block_size):
+    if num_policies <= 0:
+        raise ValueError("num_policies must be positive")
+    if block_size <= 0:
+        raise ValueError("block_size must be positive")
+
+    expected_size = num_policies * block_size
+    if isinstance(values, torch.Tensor):
+        if values.ndim != 1:
+            raise ValueError("policy objectives must be one-dimensional")
+        if values.numel() != expected_size:
+            raise ValueError(f"expected {expected_size} policy objectives, got {values.numel()}")
+        return values.reshape(num_policies, block_size).mean(dim=1)
+
+    values = np.asarray(values)
+    if values.ndim != 1:
+        raise ValueError("policy objectives must be one-dimensional")
+    if values.size != expected_size:
+        raise ValueError(f"expected {expected_size} policy objectives, got {values.size}")
+    return values.reshape(num_policies, block_size).mean(axis=1)
+
+
+def select_niche_local_parents(objectives, replaced_policy, candidate_count=8):
+    if len(objectives) < 3:
+        raise ValueError("at least three policies are required")
+    if replaced_policy < 0 or replaced_policy >= len(objectives):
+        raise ValueError("replaced_policy is out of range")
+    if candidate_count < 2:
+        raise ValueError("candidate_count must be at least two")
+
+    candidates = sorted(
+        (policy for policy in range(len(objectives)) if policy != replaced_policy),
+        key=lambda policy: (abs(policy - replaced_policy), policy),
+    )[:candidate_count]
+    ranked = sorted(
+        candidates,
+        key=lambda policy: (objectives[policy], policy),
+        reverse=True,
+    )
+    return ranked[:2]
+
+
 def swap_and_flatten01(arr):
     """
     swap and then flatten axes 0 and 1
@@ -25,6 +68,22 @@ def remove_envs_from_info(infos, num_envs):
                 continue
             infos[key] = infos[key][num_envs:]
     return infos
+
+
+def select_env_tail_from_info(infos, num_envs):
+    filtered = {}
+    for key, value in infos.items():
+        if isinstance(value, dict):
+            filtered[key] = select_env_tail_from_info(value, num_envs)
+        elif isinstance(value, (list, np.ndarray, torch.Tensor)):
+            if isinstance(value, (np.ndarray, torch.Tensor)) and value.ndim == 0:
+                filtered[key] = value
+            else:
+                filtered[key] = value[num_envs:]
+        else:
+            filtered[key] = value
+    return filtered
+
 
 def shuffle_batch(batch_dict, horizon_length):
     indices = torch.randperm(len(batch_dict['returns']) // horizon_length).to(batch_dict['returns'].device).reshape(-1,1)*horizon_length + torch.arange(horizon_length).to(batch_dict['returns'].device).reshape(1,-1)

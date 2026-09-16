@@ -1,0 +1,26 @@
+{
+  "artifact": "long-training-milestone-f18cf118ea3744d3:v3",
+  "files": {
+    "checkpoint.pth": {
+      "md5": "C5axdJtJah9pVPmsjcQJCw==",
+      "path": "/home/ubuntu22/EPO-experiments/frontier-20260914/runs/112_long_frontier_seed36001_N20480/nn/milestone_new_frames_2000158720.pth",
+      "sha256": "29f3b33d2b0d80daa923aa9dc65538d3f1220e204f91e05d253878277b85276c",
+      "size": 252663321
+    },
+    "finite.json": {
+      "md5": "iaCRk+zDn8IrQXOKt0O53Q==",
+      "path": "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260914-long-budget/training/frontier/milestone_6104_finite.json",
+      "sha256": "439beeca688580fc8f6458c9d49f55de12ca851eb47b25621d58153913e78c02",
+      "size": 7350
+    },
+    "milestone.json": {
+      "md5": "YU6jh1bGKpEqwGIcDwljtQ==",
+      "path": "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260914-long-budget/training/frontier/milestone_6104.json",
+      "sha256": "b919ad436681b3274578a1b6dfde08d2ebbe62ac2196e9d7854478d557044236",
+      "size": 2266
+    }
+  },
+  "run_id": "f18cf118ea3744d3",
+  "state": "COMMITTED",
+  "type": "long-training-milestone"
+}

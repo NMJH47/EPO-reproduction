@@ -1,0 +1,196 @@
+{
+  "ancestor_checkpoint": "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/inputs/E51.pth",
+  "ancestor_training_seed": 43,
+  "captured_on": "2026-09-16",
+  "continuation_seed": 36001,
+  "control_evaluation_mean": 41.04910242872228,
+  "evaluation_mean": 41.50422386483632,
+  "evaluation_results": {
+    "control-17001": 40.825765575501585,
+    "control-17002": 41.27243928194298,
+    "frontier-17001": 41.343189017951424,
+    "frontier-17002": 41.66525871172122
+  },
+  "evidence": [
+    {
+      "committed_path": "experiments/snapshots/historical-best/plan.json",
+      "original_path": "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260914-long-budget/plans/frontier.json",
+      "sha256": "315c2ca728f1ad4ffa1cc724390b89cd583a1d047700f093d7465d8869cea66e"
+    },
+    {
+      "committed_path": "experiments/snapshots/historical-best/config.yaml",
+      "original_path": "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260914-long-budget/plans/frontier.yaml",
+      "sha256": "5e856e35501e0e6835af7e483345dbd9e300c94c2a947317465d459b1d8df832"
+    },
+    {
+      "committed_path": "experiments/snapshots/historical-best/training_summary.json",
+      "original_path": "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260914-long-budget/training/frontier/summary.json",
+      "sha256": "7a19af03c4a678c29e88fe66c000c6c87963acc7c124a553776bcfba21b0eb54"
+    },
+    {
+      "committed_path": "experiments/snapshots/historical-best/runtime_source_manifest.json",
+      "original_path": "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260914-long-budget/training/frontier/source_manifest.json",
+      "sha256": "45521383c271bbee131196ecf5b7de8be45623522e406a038402598a62bac5cc"
+    },
+    {
+      "committed_path": "experiments/snapshots/historical-best/executed_training_config.yaml",
+      "original_path": "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260914-long-budget/training/frontier/executed_training_config.yaml",
+      "sha256": "bc4d9fcd445a992693014b15cab915586a68c8381a8ab6c977b6d973fcd00a62"
+    },
+    {
+      "committed_path": "experiments/snapshots/historical-best/training_start.json",
+      "original_path": "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260914-long-budget/training/frontier/training_start.json",
+      "sha256": "706371ef66524c5aeb32daa0f9e22ce1beb9678e3c8caa1da5f1ecdebf46a7c6"
+    },
+    {
+      "committed_path": "experiments/snapshots/historical-best/terminal_checkpoint.json",
+      "original_path": "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260914-long-budget/training/frontier/terminal_checkpoint.json",
+      "sha256": "8ad52506df47381b0d2e520fcce87634049c1bc9ccb2ea256ca92a4a3dd95600"
+    },
+    {
+      "committed_path": "experiments/snapshots/historical-best/terminal_model_artifact.json",
+      "original_path": "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260914-long-budget/training/frontier/milestone_6104_artifact_wait.json",
+      "sha256": "73e1ffe63f373ae43aa290c5ef4f63ef0ae80c89c872831e3379bea8978971d9"
+    },
+    {
+      "committed_path": "experiments/snapshots/historical-best/evaluations/frontier-17001/summary.json",
+      "original_path": "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260914-long-budget/evaluations/frontier-6104-17001/summary.json",
+      "sha256": "e6fa0a7f936f9ade58ae43dfba48b2490fddbc892a03e821595c43495e26496f"
+    },
+    {
+      "committed_path": "experiments/snapshots/historical-best/evaluations/frontier-17001/evaluation_plan.json",
+      "original_path": "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260914-long-budget/evaluations/frontier-6104-17001/evaluation_plan.json",
+      "sha256": "7d13cf852f3586dc10ee1e6119fd892188e62c54e63e4567d29d02fd3390b2e6"
+    },
+    {
+      "committed_path": "experiments/snapshots/historical-best/evaluations/frontier-17001/wandb_run.json",
+      "original_path": "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260914-long-budget/evaluations/frontier-6104-17001/wandb_run.json",
+      "sha256": "65a1791bd62e5ffb3f763157350e3d65538e2def1399125eb1be46ea0de0fed6"
+    },
+    {
+      "committed_path": "experiments/snapshots/historical-best/evaluations/frontier-17002/summary.json",
+      "original_path": "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260914-long-budget/evaluations/frontier-6104-17002/summary.json",
+      "sha256": "7fea9d30879d7a95b88f15b335e149aab2560126a2b59991926b81202ed30fcb"
+    },
+    {
+      "committed_path": "experiments/snapshots/historical-best/evaluations/frontier-17002/evaluation_plan.json",
+      "original_path": "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260914-long-budget/evaluations/frontier-6104-17002/evaluation_plan.json",
+      "sha256": "aac2f0c37fa3bf5f854a40edc4be1c46573fb2a1634a3dcf915634d53b1d3edf"
+    },
+    {
+      "committed_path": "experiments/snapshots/historical-best/evaluations/frontier-17002/wandb_run.json",
+      "original_path": "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260914-long-budget/evaluations/frontier-6104-17002/wandb_run.json",
+      "sha256": "f7bda869a73459941f5536ead273f5bfd289aea9002a6cd31b45dc8dcdc78140"
+    },
+    {
+      "committed_path": "experiments/snapshots/historical-best/evaluations/control-17001/summary.json",
+      "original_path": "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260916-recovery/evaluations/control-6104-17001/summary.json",
+      "sha256": "5b017021488618acf5ef1425f08677ad86b90a5ce3948adb28ac776f5496b084"
+    },
+    {
+      "committed_path": "experiments/snapshots/historical-best/evaluations/control-17001/evaluation_plan.json",
+      "original_path": "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260916-recovery/evaluations/control-6104-17001/evaluation_plan.json",
+      "sha256": "0158be5fda5d2e0034a27f45fb72be257d9b108afd4fd79172d1dbfcc584ac37"
+    },
+    {
+      "committed_path": "experiments/snapshots/historical-best/evaluations/control-17001/wandb_run.json",
+      "original_path": "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260916-recovery/evaluations/control-6104-17001/wandb_run.json",
+      "sha256": "189927412795637da0e85fa7e45dd5434418f7a9d5421c8ef645ebdc60e9c63b"
+    },
+    {
+      "committed_path": "experiments/snapshots/historical-best/evaluations/control-17002/summary.json",
+      "original_path": "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260916-recovery/evaluations/control-6104-17002/summary.json",
+      "sha256": "f09d82b04de81f345bed4a27cba6c75d6a7f491e0dc13eb58b7489bc5edab600"
+    },
+    {
+      "committed_path": "experiments/snapshots/historical-best/evaluations/control-17002/evaluation_plan.json",
+      "original_path": "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260916-recovery/evaluations/control-6104-17002/evaluation_plan.json",
+      "sha256": "b8ee8b47770eaba4fb9c8cc2770984f2e63f5ece9e760f9fdb991b797b43e400"
+    },
+    {
+      "committed_path": "experiments/snapshots/historical-best/evaluations/control-17002/wandb_run.json",
+      "original_path": "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260916-recovery/evaluations/control-6104-17002/wandb_run.json",
+      "sha256": "b7ecf19db84687cec27d5c8b15dd26681b048d61490f6891c3a040203cc6c518"
+    },
+    {
+      "committed_path": "experiments/snapshots/historical-best/completed_results_review.md",
+      "original_path": "/home/ubuntu22/EPO/docs/research/LONG_BUDGET_REVIEW_20260916.md",
+      "sha256": "bc459e080714145a2d79e1e15e9a34fac1a46aca87979612f69e3e5af67f7861"
+    }
+  ],
+  "files_are_archived_originals": true,
+  "model_weights_stored_in_git": false,
+  "planned_new_frames": 2000158720,
+  "run_id": "f18cf118ea3744d3",
+  "selection_scope": "Highest observed two-evaluation-seed full-947-object master mean among the reviewed completed comparable runs; not a confirmed multi-training-seed algorithm improvement.",
+  "source_bindings": [
+    {
+      "committed_path": "_research_support/cache_boundary_hooks.py",
+      "external_checkpoint": false,
+      "original_path": "/home/ubuntu22/EPO-experiments/frontier-20260914/_research_support/cache_boundary_hooks.py",
+      "sha256": "9279f86626adab941f001ce0b433d6745ad2379fe79821ce71f35e2c89809802",
+      "size_bytes": 11723
+    },
+    {
+      "committed_path": "_research_support/fresh_seal.py",
+      "external_checkpoint": false,
+      "original_path": "/home/ubuntu22/EPO-experiments/frontier-20260914/_research_support/fresh_seal.py",
+      "sha256": "26dcbb79462589f7ce2dc6db1182afabc1032a3c5bd6ae4080dea1a42a789d0a",
+      "size_bytes": 20472
+    },
+    {
+      "committed_path": null,
+      "external_checkpoint": true,
+      "original_path": "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/inputs/E51.pth",
+      "sha256": "de220625c407b463d41f9242cd652a40f5e48c253b4b9225b7817e452cf0f6be",
+      "size_bytes": 247819890
+    },
+    {
+      "committed_path": "experiments/snapshots/historical-best/bound/artifacts/research/20260914-long-budget/plans/frontier.yaml",
+      "external_checkpoint": false,
+      "original_path": "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260914-long-budget/plans/frontier.yaml",
+      "sha256": "5e856e35501e0e6835af7e483345dbd9e300c94c2a947317465d459b1d8df832",
+      "size_bytes": 9558
+    },
+    {
+      "committed_path": "experiments/snapshots/historical-best/bound/docs/research/LONG_BUDGET_FRONTIER_PROTOCOL_20260914.md",
+      "external_checkpoint": false,
+      "original_path": "/home/ubuntu22/EPO-experiments/frontier-20260914/docs/research/LONG_BUDGET_FRONTIER_PROTOCOL_20260914.md",
+      "sha256": "37b798bb60314a91ee458237645b128d1ab743340ecf4a17cf64fce7b8b1998a",
+      "size_bytes": 10283
+    },
+    {
+      "committed_path": "scripts/research/dapo_actor.py",
+      "external_checkpoint": false,
+      "original_path": "/home/ubuntu22/EPO-experiments/frontier-20260914/scripts/research/dapo_actor.py",
+      "sha256": "9a4ee800b98574c50225d1f3af723a67cfb1ae86efcd7bf8077d153c114924e0",
+      "size_bytes": 4382
+    },
+    {
+      "committed_path": "scripts/research/frontier_curriculum.py",
+      "external_checkpoint": false,
+      "original_path": "/home/ubuntu22/EPO-experiments/frontier-20260914/scripts/research/frontier_curriculum.py",
+      "sha256": "d6510d09a6448b9afb3290513411701f2ad55d8a08d71eb98c5292c6677f7e38",
+      "size_bytes": 36331
+    },
+    {
+      "committed_path": "scripts/research/run_long_budget_training.py",
+      "external_checkpoint": false,
+      "original_path": "/home/ubuntu22/EPO-experiments/frontier-20260914/scripts/research/run_long_budget_training.py",
+      "sha256": "0582a2ac21b99b8bb54c413825e6eb705d744504ef52350c49985e05d3969c18",
+      "size_bytes": 49099
+    },
+    {
+      "committed_path": "scripts/research/run_training_probe.py",
+      "external_checkpoint": false,
+      "original_path": "/home/ubuntu22/EPO-experiments/frontier-20260914/scripts/research/run_training_probe.py",
+      "sha256": "ce7cf8bc8788b3817c113cbb3f6eb1e9cf1e5ad0add5ca06b97ca14c75bb4f61",
+      "size_bytes": 16987
+    }
+  ],
+  "source_worktree": "/home/ubuntu22/EPO-experiments/frontier-20260914",
+  "status": "completed_2b_continuation_with_complete_frozen_evaluation",
+  "training_plan_sha256": "315c2ca728f1ad4ffa1cc724390b89cd583a1d047700f093d7465d8869cea66e",
+  "variant": "historical-best",
+  "wandb_url": "https://wandb.ai/leo-ucbm-university-of-california-berkeley/EPO-reproduction/runs/f18cf118ea3744d3"
+}

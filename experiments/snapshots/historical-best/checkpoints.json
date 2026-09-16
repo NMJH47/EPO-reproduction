@@ -1,0 +1,50 @@
+[
+  {
+    "epoch": 15565,
+    "frame": 5100339200,
+    "identity": {
+      "md5": "XPFE3qV+u30RF8LudABAtg==",
+      "sha256": "1b3b48a9b54882f96e685fe8c11b0f552e75c1c2add06dc6ccacf6a8376d3e3e",
+      "size": 252652569
+    },
+    "new_frames": 100270080,
+    "path": "/home/ubuntu22/EPO-experiments/frontier-20260914/runs/112_long_frontier_seed36001_N20480/nn/milestone_new_frames_100270080.pth",
+    "relative_epoch": 306
+  },
+  {
+    "epoch": 16785,
+    "frame": 5500108800,
+    "identity": {
+      "md5": "5eYSdATtgrzmC2SCFuQU8w==",
+      "sha256": "116c741c188abfebf8ec4b02a0d27b2b77106a74e48343f7d9458c7fc9c7343e",
+      "size": 252655065
+    },
+    "new_frames": 500039680,
+    "path": "/home/ubuntu22/EPO-experiments/frontier-20260914/runs/112_long_frontier_seed36001_N20480/nn/milestone_new_frames_500039680.pth",
+    "relative_epoch": 1526
+  },
+  {
+    "epoch": 18311,
+    "frame": 6000148480,
+    "identity": {
+      "md5": "EUasUP0lB/7eVNy6N3JGWw==",
+      "sha256": "e42e8b048f0db89b331a6444a9bb3f03417c074db96448d554fa508e82e7c175",
+      "size": 252657753
+    },
+    "new_frames": 1000079360,
+    "path": "/home/ubuntu22/EPO-experiments/frontier-20260914/runs/112_long_frontier_seed36001_N20480/nn/milestone_new_frames_1000079360.pth",
+    "relative_epoch": 3052
+  },
+  {
+    "epoch": 21363,
+    "frame": 7000227840,
+    "identity": {
+      "md5": "C5axdJtJah9pVPmsjcQJCw==",
+      "sha256": "29f3b33d2b0d80daa923aa9dc65538d3f1220e204f91e05d253878277b85276c",
+      "size": 252663321
+    },
+    "new_frames": 2000158720,
+    "path": "/home/ubuntu22/EPO-experiments/frontier-20260914/runs/112_long_frontier_seed36001_N20480/nn/milestone_new_frames_2000158720.pth",
+    "relative_epoch": 6104
+  }
+]

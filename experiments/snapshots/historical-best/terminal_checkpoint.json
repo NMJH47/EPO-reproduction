@@ -1,0 +1,12 @@
+{
+  "epoch": 21363,
+  "frame": 7000227840,
+  "identity": {
+    "md5": "C5axdJtJah9pVPmsjcQJCw==",
+    "sha256": "29f3b33d2b0d80daa923aa9dc65538d3f1220e204f91e05d253878277b85276c",
+    "size": 252663321
+  },
+  "new_frames": 2000158720,
+  "path": "/home/ubuntu22/EPO-experiments/frontier-20260914/runs/112_long_frontier_seed36001_N20480/nn/milestone_new_frames_2000158720.pth",
+  "relative_epoch": 6104
+}

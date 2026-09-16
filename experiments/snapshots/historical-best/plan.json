@@ -1,0 +1,51 @@
+{
+  "actor_source": "/home/ubuntu22/EPO-experiments/frontier-20260914/scripts/research/dapo_actor.py",
+  "arm": "frontier",
+  "base_source": "/home/ubuntu22/EPO-experiments/frontier-20260914/scripts/research/run_training_probe.py",
+  "checkpoint": "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/inputs/E51.pth",
+  "clip_high": 0.1,
+  "clip_low": 0.1,
+  "config": "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260914-long-budget/plans/frontier.yaml",
+  "curriculum": {
+    "adaptive_mass": 0.5,
+    "cohort_epochs": 64,
+    "decay": 0.9,
+    "enabled": true,
+    "grid_size": 3,
+    "group_proxy_size": 16,
+    "maturity_steps": 600,
+    "warmup_epochs": 306
+  },
+  "curriculum_source": "/home/ubuntu22/EPO-experiments/frontier-20260914/scripts/research/frontier_curriculum.py",
+  "epochs": 6104,
+  "execution_ready": true,
+  "execution_root": "/home/ubuntu22/EPO-experiments/frontier-20260914",
+  "extra_plan_files": {
+    "protocol.md": "/home/ubuntu22/EPO-experiments/frontier-20260914/docs/research/LONG_BUDGET_FRONTIER_PROTOCOL_20260914.md"
+  },
+  "files_sha256": {
+    "/home/ubuntu22/EPO-experiments/frontier-20260914/_research_support/cache_boundary_hooks.py": "9279f86626adab941f001ce0b433d6745ad2379fe79821ce71f35e2c89809802",
+    "/home/ubuntu22/EPO-experiments/frontier-20260914/_research_support/fresh_seal.py": "26dcbb79462589f7ce2dc6db1182afabc1032a3c5bd6ae4080dea1a42a789d0a",
+    "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/inputs/E51.pth": "de220625c407b463d41f9242cd652a40f5e48c253b4b9225b7817e452cf0f6be",
+    "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260914-long-budget/plans/frontier.yaml": "5e856e35501e0e6835af7e483345dbd9e300c94c2a947317465d459b1d8df832",
+    "/home/ubuntu22/EPO-experiments/frontier-20260914/docs/research/LONG_BUDGET_FRONTIER_PROTOCOL_20260914.md": "37b798bb60314a91ee458237645b128d1ab743340ecf4a17cf64fce7b8b1998a",
+    "/home/ubuntu22/EPO-experiments/frontier-20260914/scripts/research/dapo_actor.py": "9a4ee800b98574c50225d1f3af723a67cfb1ae86efcd7bf8077d153c114924e0",
+    "/home/ubuntu22/EPO-experiments/frontier-20260914/scripts/research/frontier_curriculum.py": "d6510d09a6448b9afb3290513411701f2ad55d8a08d71eb98c5292c6677f7e38",
+    "/home/ubuntu22/EPO-experiments/frontier-20260914/scripts/research/run_long_budget_training.py": "0582a2ac21b99b8bb54c413825e6eb705d744504ef52350c49985e05d3969c18",
+    "/home/ubuntu22/EPO-experiments/frontier-20260914/scripts/research/run_training_probe.py": "ce7cf8bc8788b3817c113cbb3f6eb1e9cf1e5ad0add5ca06b97ca14c75bb4f61"
+  },
+  "finite_source": "/home/ubuntu22/EPO-experiments/frontier-20260914/_research_support/fresh_seal.py",
+  "milestone_epochs": [
+    306,
+    1526,
+    3052,
+    6104
+  ],
+  "mode": "e51",
+  "nvml_source": "/home/ubuntu22/EPO-experiments/frontier-20260914/_research_support/cache_boundary_hooks.py",
+  "output": "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260914-long-budget/training/frontier",
+  "purpose": "epo_long_budget_training",
+  "run_id": "f18cf118ea3744d3",
+  "seed": 36001,
+  "stage": "primary"
+}

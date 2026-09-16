@@ -40,7 +40,12 @@ from rl_games.common.algo_observer import AlgoObserver
 from isaacgymenvs.pbt.pbt import PbtAlgoObserver
 
 from isaacgymenvs.tasks import isaacgym_task_map
-from rl_games.common.custom_utils import remove_envs_from_info
+from rl_games.common.custom_utils import (
+    policy_block_means,
+    remove_envs_from_info,
+    select_env_tail_from_info,
+    select_niche_local_parents,
+)
 from isaacgymenvs.utils.utils import set_seed, flatten_dict
 
 from omegaconf import DictConfig
@@ -251,12 +256,28 @@ class EPOObserver(AlgoObserver):
 
         # EPO
         self.best_embeddings = True
-        self.num_agent = cfg.task.env.numEnvs // cfg.train.params.config.expl_coef_block_size
+        self.num_envs = int(cfg.task.env.numEnvs)
+        self.policy_block_size = int(cfg.train.params.config.expl_coef_block_size)
+        if self.policy_block_size <= 0:
+            raise ValueError("expl_coef_block_size must be positive")
+        if self.num_envs % self.policy_block_size != 0:
+            raise ValueError("numEnvs must be divisible by expl_coef_block_size")
+        self.num_agent = self.num_envs // self.policy_block_size
         self.sapg_iteration = -1
 
-        self.finished_agents = set()
         self.last_target_objectives = None
+        self.finished_agents = None
+        self.best_target_objectives = None
         self.best_objective_curr_iteration: Optional[float] = None
+        self.curr_target_objective_value_per_block = [_UNINITIALIZED_VALUE] * self.num_agent
+        self.best_objective_curr_iteration_per_block = [_UNINITIALIZED_VALUE] * self.num_agent
+        self.target_objective_known = False
+        self.max_consecutive_successes = int(cfg.task.env.get("maxConsecutiveSuccesses", 50))
+        self.completed_episode_count = None
+        self.completed_at_cap_count = None
+        self.completed_episode_count_per_block = None
+        self.latest_population_successes = None
+        self.block_metrics = {}
 
         # EPO params (fixed for now)
         self.interval_steps = 20000000
@@ -266,6 +287,126 @@ class EPOObserver(AlgoObserver):
     def after_init(self, algo):
         self.algo = algo
         self.writer = self.algo.writer
+
+    def _process_true_objective_fitness(self, infos, done_indices):
+        true_objective = infos['true_objective']
+        if true_objective.ndim != 1 or true_objective.shape[0] != self.num_envs:
+            raise ValueError(
+                f"true_objective must have shape ({self.num_envs},), got {tuple(true_objective.shape)}"
+            )
+
+        if self.last_target_objectives is None:
+            self.last_target_objectives = torch.full(
+                (self.num_envs,),
+                _UNINITIALIZED_VALUE,
+                device=true_objective.device,
+                dtype=true_objective.dtype,
+            )
+            self.finished_agents = torch.zeros(
+                self.num_envs,
+                device=true_objective.device,
+                dtype=torch.bool,
+            )
+            self.best_target_objectives = torch.full(
+                (self.num_agent,),
+                _UNINITIALIZED_VALUE,
+                device=true_objective.device,
+                dtype=true_objective.dtype,
+            )
+
+        done_indices_flat = done_indices.reshape(-1).to(
+            device=true_objective.device,
+            dtype=torch.long,
+        )
+        if done_indices_flat.numel() == 0:
+            return
+
+        completed_objectives = true_objective.index_select(0, done_indices_flat)
+        self.last_target_objectives.index_copy_(
+            0,
+            done_indices_flat,
+            completed_objectives,
+        )
+        self.finished_agents[done_indices_flat] = True
+        block_means = policy_block_means(
+            self.last_target_objectives,
+            self.num_agent,
+            self.policy_block_size,
+        )
+        self.best_target_objectives.copy_(
+            torch.where(
+                self.finished_agents.all(),
+                torch.maximum(self.best_target_objectives, block_means),
+                self.best_target_objectives,
+            )
+        )
+
+    def _refresh_fitness_snapshot(self):
+        if self.last_target_objectives is None:
+            self.target_objective_known = False
+            return
+
+        block_means = policy_block_means(
+            self.last_target_objectives,
+            self.num_agent,
+            self.policy_block_size,
+        )
+        snapshot = torch.cat(
+            [
+                self.finished_agents.sum().to(
+                    dtype=self.last_target_objectives.dtype
+                ).reshape(1),
+                self.last_target_objectives.mean().reshape(1),
+                block_means,
+                self.best_target_objectives,
+            ]
+        ).detach().cpu().tolist()
+        self.target_objective_known = int(snapshot[0]) == self.num_envs
+        if not self.target_objective_known:
+            return
+
+        self.curr_target_objective_value = snapshot[1]
+        block_offset = 2 + self.num_agent
+        self.curr_target_objective_value_per_block = snapshot[2:block_offset]
+        self.best_objective_curr_iteration_per_block = snapshot[block_offset:]
+
+    def _process_completed_successes(self, infos, done_indices):
+        successes = infos['current_episode_successes']
+        if successes.ndim != 1 or successes.shape[0] != self.num_envs:
+            raise ValueError(
+                f"successes must have shape ({self.num_envs},), got {tuple(successes.shape)}"
+            )
+
+        done_indices_flat = done_indices.reshape(-1).to(
+            device=successes.device,
+            dtype=torch.long,
+        )
+        if done_indices_flat.numel() == 0:
+            return
+
+        completed_successes = successes.index_select(
+            0,
+            done_indices_flat.to(device=successes.device),
+        )
+        if self.completed_episode_count is None:
+            self.completed_episode_count = torch.zeros(
+                (), device=successes.device, dtype=torch.long
+            )
+            self.completed_at_cap_count = torch.zeros(
+                (), device=successes.device, dtype=torch.long
+            )
+            self.completed_episode_count_per_block = torch.zeros(
+                self.num_agent, device=successes.device, dtype=torch.long
+            )
+
+        block_ids = torch.div(done_indices_flat, self.policy_block_size, rounding_mode='floor')
+        self.completed_episode_count.add_(done_indices_flat.numel())
+        self.completed_at_cap_count.add_(
+            (completed_successes >= self.max_consecutive_successes).sum()
+        )
+        self.completed_episode_count_per_block.add_(
+            torch.bincount(block_ids, minlength=self.num_agent)
+        )
     
     def after_steps(self):
         '''Called after each step of the algorithm.
@@ -286,6 +427,8 @@ class EPOObserver(AlgoObserver):
 
         if iteration <= self.sapg_iteration:
             return
+
+        self._refresh_fitness_snapshot()
         
         if not self.target_objective_known:
             # not enough data yet to calcuate avg true_objective
@@ -306,8 +449,12 @@ class EPOObserver(AlgoObserver):
 
         objectives = [obj for obj, _ in policies_sorted]
         policies = [pol for _, pol in policies_sorted]
-        best_policies = policies[:2]
         worst_policy = policies[-1]
+        best_policies = select_niche_local_parents(
+            best_objective_curr_iteration_per_block,
+            worst_policy,
+            candidate_count=8,
+        )
 
         print(f"Best_policies={best_policies}, worst_policies={worst_policy}: Start replacing embeddings")
         objectives_filtered = [obj for obj in objectives if obj > _UNINITIALIZED_VALUE]
@@ -319,14 +466,24 @@ class EPOObserver(AlgoObserver):
         self.writer.add_scalar('auxiliary/objective_std', objective_std, env_frames)
         self.writer.add_scalar('auxiliary/objective_delta', objective_delta, env_frames)
         self.writer.add_scalar('auxiliary/objective_skewness', objective_skewness, env_frames)
+        self.writer.add_scalar('evolution/parent_policy_0', best_policies[0], env_frames)
+        self.writer.add_scalar('evolution/parent_policy_1', best_policies[1], env_frames)
+        self.writer.add_scalar('evolution/replaced_policy', worst_policy, env_frames)
+        self.writer.add_scalar(
+            'evolution/replaced_policy_objective',
+            best_objective_curr_iteration_per_block[worst_policy],
+            env_frames,
+        )
      
         # Eliminate the worst policy
         for i in range(1):
             worst_policy = policies[-1-i]
             self.algo.model.a2c_network.merge_extra_params(best_policies, worst_policy)
+            self.algo.disable_gene_optimizer_updates()
 
         # reset best_objective_curr_iteration_per_block
         self.best_objective_curr_iteration_per_block = [_UNINITIALIZED_VALUE] *self.num_agent
+        self.best_target_objectives.fill_(_UNINITIALIZED_VALUE)
         self.target_objective_known = False
         self.sapg_iteration = iteration
 
@@ -354,22 +511,28 @@ class EPOObserver(AlgoObserver):
         assert isinstance(infos, dict), 'RLGPUAlgoObserver expects dict info'
         if not isinstance(infos, dict):
             return
-        
-        
-        
-        if self.best_embeddings and self.last_target_objectives == None:
-            # init
-            print("Initializing last_target_objectives")
-            # all keys in infos
-            print("all keys in infos: ", infos.keys())
-            self.last_target_objectives = [_UNINITIALIZED_VALUE] * (infos['true_objective'].shape[0] - kwargs.get("ignore_env_boundary", 0))
-            # breakpoint()
-            self.curr_target_objective_value_per_block = [_UNINITIALIZED_VALUE] *self.num_agent
-            self.best_objective_curr_iteration_per_block = [_UNINITIALIZED_VALUE] * self.num_agent
+        if self.best_embeddings and 'true_objective' in infos:
+            self._process_true_objective_fitness(infos, done_indices)
+        if self.best_embeddings and 'current_episode_successes' in infos:
+            self._process_completed_successes(infos, done_indices)
+        if self.best_embeddings and 'successes' in infos:
+            self.latest_population_successes = infos['successes'].detach()
 
-        if kwargs.get("ignore_env_boundary", 0) > 0:
-            infos = remove_envs_from_info(copy.deepcopy(infos), kwargs["ignore_env_boundary"])
-            done_indices = done_indices[done_indices >= kwargs["ignore_env_boundary"]].unsqueeze(-1) - kwargs["ignore_env_boundary"]
+        ignore_env_boundary = kwargs.get("ignore_env_boundary", 0)
+        if ignore_env_boundary > 0:
+            for tag in ['successes', 'closest_keypoint_max_dist', 'true_objective']:
+                value = infos.get(tag)
+                if isinstance(value, torch.Tensor) and value.ndim == 1 and value.numel() == self.num_envs:
+                    self.block_metrics[tag] = policy_block_means(
+                        value,
+                        self.num_agent,
+                        self.policy_block_size,
+                    ).detach()
+            infos = select_env_tail_from_info(infos, ignore_env_boundary)
+            done_indices = (
+                done_indices[done_indices >= ignore_env_boundary].unsqueeze(-1)
+                - ignore_env_boundary
+            )
             
 
         if 'episode' in infos:
@@ -404,7 +567,7 @@ class EPOObserver(AlgoObserver):
         for tag in ['successes', 'closest_keypoint_max_dist', 'discounted_reward', 'true_objective']:
             if tag in infos:
                 self.direct_info[tag] = infos[tag].mean()
-                self.direct_info[f'{tag}_median'] = torch.median(infos[tag]).item()
+                self.direct_info[f'{tag}_median'] = torch.median(infos[tag])
                 self.direct_info[f'{tag}_max'] = infos[tag].max()
                 for key in infos:
                     if key.startswith(f'{tag}_per_block'):
@@ -413,25 +576,6 @@ class EPOObserver(AlgoObserver):
         if 'true_objective' in infos:
             self.direct_info['true_objective_mean'] = infos['true_objective'].mean()
             self.direct_info['true_objective_max'] = infos['true_objective'].max()
-            if self.best_embeddings:
-                done_indices_lst = done_indices.squeeze(-1).tolist()
-                self.finished_agents.update(done_indices_lst)
-                # print("done indices list: ", done_indices_lst)
-
-                for done_idx in done_indices_lst:
-                    true_objective_value = infos["true_objective"][done_idx].item()
-                    self.last_target_objectives[done_idx] = true_objective_value
-
-                # # last result for all episodes
-                b_size = infos['true_objective'].shape[0] // self.num_agent
-                self.target_objective_known = len(self.finished_agents) >= len(self.last_target_objectives)
-                # print("!!!!!! known: ", self.target_objective_known, self.finished_agents, len(self.last_target_objectives))
-                if self.target_objective_known:
-                # print("update true objective")
-                # breakpoint()
-                    self.curr_target_objective_value = float(np.mean(self.last_target_objectives))
-                    for i in range(self.num_agent):
-                        self.curr_target_objective_value_per_block[i] = float(np.mean(self.last_target_objectives[i*b_size:(i+1)*b_size]))
         else:
             # environment does not specify "true objective", use regular reward
             # in this case, be careful not to include reward shaping coefficients into the mutation config
@@ -439,15 +583,6 @@ class EPOObserver(AlgoObserver):
                 self.target_objective_known = self.algo.game_rewards.current_size >= self.algo.games_to_track
                 if self.target_objective_known:
                     self.curr_target_objective_value = float(self.algo.mean_rewards)
-
-        if self.best_embeddings and self.target_objective_known:
-            for i in range(self.num_agent):
-                if self.curr_target_objective_value_per_block[i] > self.best_objective_curr_iteration_per_block[i]:
-                    print(
-                        f"New best objective value {self.curr_target_objective_value_per_block[i]} in iteration {self.sapg_iteration} block {i}"
-                    )
-                    self.best_objective_curr_iteration_per_block[i] = self.curr_target_objective_value_per_block[i]
-
 
     def after_print_stats(self, frame, epoch_num, total_time):
         if self.ep_infos:
@@ -471,6 +606,82 @@ class EPOObserver(AlgoObserver):
                 self.writer.add_scalar(f'episode_cumulative_min/{key}_min', np.min(self.episode_cumulative_avg[key]), frame)
                 self.writer.add_scalar(f'episode_cumulative_max/{key}_max', np.max(self.episode_cumulative_avg[key]), frame)
             self.new_finished_episodes = False
+
+        if self.completed_episode_count is not None:
+            completed_summary = torch.cat(
+                [
+                    self.completed_episode_count.reshape(1),
+                    self.completed_at_cap_count.reshape(1),
+                    self.completed_episode_count_per_block,
+                ]
+            ).detach().cpu().tolist()
+            completed_episode_count = int(completed_summary[0])
+            completed_at_cap_count = int(completed_summary[1])
+            block_counts = np.asarray(completed_summary[2:], dtype=np.float64)
+            self.completed_episode_count.zero_()
+            self.completed_at_cap_count.zero_()
+            self.completed_episode_count_per_block.zero_()
+        else:
+            completed_episode_count = 0
+
+        if completed_episode_count > 0:
+            self.writer.add_scalar(
+                'population/new_episode_count',
+                completed_episode_count,
+                frame,
+            )
+            self.writer.add_scalar(
+                'population/new_success_at_cap_count',
+                completed_at_cap_count,
+                frame,
+            )
+            self.writer.add_scalar(
+                'population/new_success_at_cap_rate',
+                completed_at_cap_count / completed_episode_count,
+                frame,
+            )
+            self.writer.add_scalar('population/new_episode_count_block_min', block_counts.min(), frame)
+            self.writer.add_scalar('population/new_episode_count_block_mean', block_counts.mean(), frame)
+            self.writer.add_scalar('population/new_episode_count_block_max', block_counts.max(), frame)
+
+        if self.latest_population_successes is not None:
+            population = self.latest_population_successes.float()
+            master = population[-self.policy_block_size:]
+            quantiles = torch.tensor([0.1, 0.25, 0.5, 0.75, 0.9], device=population.device)
+            for scope, values in [('population', population), ('master', master)]:
+                distribution = torch.cat(
+                    [
+                        values.mean().reshape(1),
+                        torch.quantile(values, quantiles),
+                        (values >= self.max_consecutive_successes).float().mean().reshape(1),
+                        (values < 10).float().mean().reshape(1),
+                        (values == 0).float().mean().reshape(1),
+                    ]
+                ).detach().cpu().tolist()
+                names = [
+                    'mean',
+                    'p10',
+                    'p25',
+                    'median',
+                    'p75',
+                    'p90',
+                    'cap_fraction',
+                    'lt10_fraction',
+                    'zero_fraction',
+                ]
+                for name, value in zip(names, distribution):
+                    self.writer.add_scalar(
+                        f'population_success_distribution/{scope}_{name}',
+                        value,
+                        frame,
+                    )
+
+        for tag, block_values in self.block_metrics.items():
+            for block, value in enumerate(block_values.detach().cpu().tolist()):
+                metric = f'{tag}_per_block/block_{block}'
+                self.writer.add_scalar(f'{metric}/frame', value, frame)
+                self.writer.add_scalar(f'{metric}/iter', value, epoch_num)
+                self.writer.add_scalar(f'{metric}/time', value, total_time)
         
         for k, v in self.direct_info.items():
             self.writer.add_scalar(f'{k}/frame', v, frame)

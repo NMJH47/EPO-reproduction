@@ -40,3 +40,5 @@ archive
 !tests/test_wandb_reliability.py
 
 /isaacgym
+
+/artifacts/
