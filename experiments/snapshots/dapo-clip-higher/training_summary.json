@@ -1,0 +1,172 @@
+{
+  "arm": "clip_higher",
+  "counts": {
+    "actor_attempts": 12984,
+    "actor_returns": 12984,
+    "adam_entered": 12979,
+    "adam_exceptions": 0,
+    "adam_returned": 12979,
+    "env_step_attempts": 25984,
+    "env_step_returns": 25984,
+    "epoch_entries": 1624,
+    "epoch_returns": 1623,
+    "ga_merge_calls": 22,
+    "ga_merge_returns": 22,
+    "gene_disable_calls": 23,
+    "gene_disable_returns": 23,
+    "history_releases": 1623,
+    "lr_calls": 3246,
+    "lr_returns": 3246,
+    "prepare_returns": 1623,
+    "resource_samples": 14607,
+    "scheduler_calls": 3246,
+    "scheduler_returns": 3246
+  },
+  "curriculum": {
+    "active_proposals": 0,
+    "catalog_sha256": "6dca76b0f9520c7bd1324b91ff97121e963022095b39e0c4bbd2b5a37ddf443c",
+    "cohorts_deferred": 0,
+    "cohorts_merged": 24,
+    "complete_new_episode_endings": 316644,
+    "completed_epochs": 1623,
+    "control_steps": 25984,
+    "eligible_at_close_cumulative": 11665162,
+    "enabled": false,
+    "first_error": null,
+    "ga_notifications": 22,
+    "goal_births": 11692065,
+    "goal_cancelled": 0,
+    "goal_failure": 152834,
+    "goal_pending": 20023,
+    "goal_success": 11519208,
+    "inherited_episode_closures": 20465,
+    "inherited_goal_closures": 20046,
+    "native_coordinate_rounding_bin_changes": 0,
+    "new_episode_births": 337114,
+    "new_episode_cancelled": 0,
+    "new_episode_pending": 20470,
+    "new_finished_env_count": 20480,
+    "new_physical_frames": 532152320,
+    "oldest_unfinished_env_age_steps": 0,
+    "q_nonuniform": true,
+    "q_teacher_version": 21,
+    "raw_done_events": 337109,
+    "resume_supported": false,
+    "schema": 1,
+    "status": "observing",
+    "teacher_computations": 21,
+    "teacher_eligible_pending": 20022,
+    "teacher_invalidated_births": 188454,
+    "teacher_smoothed_proxy_at_q_version": {
+      "continuation": {
+        "kl_q_to_uniform": 0.0019598589057658287,
+        "max_bin_probability": 0.12089292495048283,
+        "min_bin_probability": 0.10010545362691911,
+        "q_weighted_success_proxy": 0.980946965173642,
+        "uniform_weighted_success_proxy": 0.9810488210439369
+      },
+      "initial": {
+        "kl_q_to_uniform": 0.00018873582426569497,
+        "max_bin_probability": 0.11407689008294587,
+        "min_bin_probability": 0.10712606817854874,
+        "q_weighted_success_proxy": 0.9144781837808482,
+        "uniform_weighted_success_proxy": 0.9145950899350535
+      }
+    },
+    "teacher_updates": 0
+  },
+  "effective_exit_code": 1,
+  "env_step_attempts_without_return": 0,
+  "errors": [
+    {
+      "error": "KeyboardInterrupt()",
+      "primary_error": "KeyboardInterrupt()",
+      "utc": "2026-09-16T01:19:48.758897+00:00",
+      "where": "train_epoch_or_post_return_observation"
+    },
+    {
+      "error": "KeyboardInterrupt()",
+      "primary_error": "KeyboardInterrupt()",
+      "utc": "2026-09-16T01:19:48.759125+00:00",
+      "where": "native_train"
+    },
+    {
+      "error": "KeyboardInterrupt()",
+      "primary_error": "KeyboardInterrupt()",
+      "utc": "2026-09-16T01:19:48.759202+00:00",
+      "where": "active_native_exception_before_seal"
+    }
+  ],
+  "failed_raw_scope": "Closed files uploaded; unconfirmed-open TB retained locally for post-exit parent archive",
+  "finite_scope": "Live model/RMS/actual Adam after original terminal save; no checkpoint reload",
+  "incomplete_step_scope": "A failed env_step may have advanced simulation before returning; internal partial physics unknown",
+  "intervention": "Only actor upper .1->.2; native target proposal",
+  "last_resource": {
+    "boundary": "after_native_epoch_return",
+    "disk_free_bytes": 35533479936,
+    "driver_free_bytes": 5841551360,
+    "driver_total_bytes": 17171480576,
+    "driver_used_bytes": 11329929216
+  },
+  "milestone_checkpoints": [
+    {
+      "epoch": 15565,
+      "frame": 5100339200,
+      "identity": {
+        "md5": "DgN5Ozjwp27mX8j/tlKWFw==",
+        "sha256": "5f8277b53315fdf2d894bcc03616f7987daff04383b7e9259e4f2b024635f797",
+        "size": 252652569
+      },
+      "new_frames": 100270080,
+      "path": "/home/ubuntu22/EPO-experiments/frontier-20260914/runs/118_structural_clip_higher_seed36001_N20480/nn/milestone_new_frames_100270080.pth",
+      "relative_epoch": 306
+    },
+    {
+      "epoch": 16785,
+      "frame": 5500108800,
+      "identity": {
+        "md5": "sRfZlmi7sm05+OeyBsVc4w==",
+        "sha256": "e96c6ca1808f757f6e63013f4a195e888f77c5b123b20848ad763616590e3f79",
+        "size": 252655129
+      },
+      "new_frames": 500039680,
+      "path": "/home/ubuntu22/EPO-experiments/frontier-20260914/runs/118_structural_clip_higher_seed36001_N20480/nn/milestone_new_frames_500039680.pth",
+      "relative_epoch": 1526
+    }
+  ],
+  "mode": "e51",
+  "native_exit_code": 1,
+  "native_writer_closed": true,
+  "norm_probe": {
+    "clip_returned": 12984,
+    "journal_closed": true,
+    "policy": "full_model",
+    "sample_count": 55,
+    "sampling": "first8 attempts OR each64th relative epoch batch8 OR first batch after GA return; union, no duplicate row",
+    "sampling_reason_counts": {
+      "every_64th_epoch_last_batch": 25,
+      "first_batch_after_ga": 22,
+      "first_eight_attempts": 8
+    },
+    "scope": "Same-pass sparse CUDA norm telemetry; no extra forward/backward, no additional zeroing, no RMS/scaler/GA/LF change",
+    "source_sha256": "18a4f1ea25aa3d7ff893ad72781e0d008be4028c84356fa224bd1860176f8ef0",
+    "unscale_returned": 12984
+  },
+  "observed_epoch_wall_seconds": 11097.024068301032,
+  "original_core_fps": 47958.78654856175,
+  "original_core_seconds": 11089.201338768005,
+  "physical_frames_returned_lower_bound": 532152320,
+  "planned_epochs": 6104,
+  "primary_error": "KeyboardInterrupt()",
+  "resource_scope": "Post-return samples only, not continuous free-memory guarantee",
+  "seed": 36001,
+  "start_frame": 5000069120,
+  "status": "failed",
+  "status_scope": "Native quotas and closed payload validation before final upload/finish; parent actual wait and fresh API still required",
+  "stopping_policy": "Fixed complete budget only; no early efficacy gate",
+  "suppressed_saves": 12,
+  "target_frame": 7000227840,
+  "terminal_checkpoint": null,
+  "timing_scope": "Native core and observed epoch wall; process wait/monitor window separately owned by parent",
+  "unknown_additional_control_frames_upper_bound": 0
+}

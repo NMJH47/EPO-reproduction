@@ -1,42 +1,55 @@
-# 历史最高完整评估快照：frontier 2B
+# DAPO Clip-Higher 长预算实验快照
 
-分支：`archive/historical-best-frontier-2b`。保存日期：2026-09-16。
+分支：`exp/dapo-clip-higher-2b`。保存日期：2026-09-16。
 
-本分支保存已完成实验 `112_long_frontier_seed36001_N20480` 的实际源码和配置。
-在已核验、可比较的完整947对象评估中，固定master63的两个评估seed均值为
-**41.5042238648**，对应control为 **41.0491024287**。这是历史观测最高快照；
-仅有一个共同E51祖先和一个continuation seed，不能据此确立跨训练seed的算法优势。
+本分支保存实验 `118_structural_clip_higher_seed36001_N20480` 的实际执行源码和配置。
+训练已于2026-09-16 09:20北京时间按用户要求停止；原父进程记录实际退出码`-15`。
+它是尚未完成的实验版本，当前没有完整2B效果结论。此次保存不恢复训练。
 
-## 源码与行为
+## 与历史最高快照的配置区别
 
-- 继承E51：F1全种群fitness、niche-local8父代、off-policy actor support门、off-policy critic系数0、原位gene更新和原AMP裁剪行为。
-- frontier课程开启：3×3目标位置区域，warmup306轮，cohort64轮，maturity600步，原分布与自适应提案各占0.5。
-- actor保持原ratio裁剪区间`[0.9, 1.1]`；没有启用Clip-Higher。
-- 训练入口：`scripts/research/run_long_budget_training.py`。
-- 课程实现：`scripts/research/frontier_curriculum.py`。
+| 项目 | 历史最高frontier 2B | 当前DAPO Clip-Higher |
+|---|---|---|
+| actor ratio下界 | 0.9 | 0.9 |
+| actor ratio上界 | 1.1 | 1.2 |
+| frontier课程 | 开启 | 关闭，仅被动记录 |
+| critic clip与LF support门 | 原实现 | 原实现 |
+| 梯度裁剪参数集合 | 全model | 全model |
+| 同次稀疏norm探针 | 无本轮新增hook | 开启 |
+| 训练起点 | E51 5B checkpoint | 同一E51 5B checkpoint |
 
-## 训练与结果身份
+Git分支以历史快照提交为代码父节点，便于查看新增执行入口和配置差异；
+**训练血缘仍是E51，而非frontier终点权重**。Clip-Higher与owned-only clipping
+是原队列的独立实验，本分支选中的`clip_higher`臂没有同时启用owned-only clipping。
 
-- E51祖先：frame5,000,069,120，训练seed43。
-- continuation seed36001，连续6104轮，新增2,000,158,720帧，终点frame7,000,227,840。
-- 训练W&B：[f18cf118ea3744d3](https://wandb.ai/leo-ucbm-university-of-california-berkeley/EPO-reproduction/runs/f18cf118ea3744d3)。
-- 评估：master63、全947对象首episode、随机动作、tolerance0.01、cap50，eval seed17001/17002，全部无删失。
-- 最终checkpoint SHA256：`29f3b33d2b0d80daa923aa9dc65538d3f1220e204f91e05d253878277b85276c`。
+## 源码位置
 
-[版本清单](experiments/snapshots/historical-best/version.json)绑定实际源码、执行配置、评估摘要和原始记录位置；
-[checkpoint清单](experiments/snapshots/historical-best/checkpoints.json)保存四个里程碑身份；
-[终点artifact记录](experiments/snapshots/historical-best/terminal_model_artifact.json)给出权重归档身份。
-模型权重、原始episode CSV和训练日志保留在既有本地/W&B归档，不加入Git。
+- actor实现：`scripts/research/dapo_actor.py`的`actor_loss_asymmetric`。
+- 长训练入口：`scripts/research/run_structural_training.py`。
+- 同次稀疏norm探针：`scripts/research/clip_scope_hooks.py`。
+- 原队列入口与收尾：`scripts/research/run_structural_study.py`、`_research_support/monitor_job_consistent.py`。
+- [实际执行计划](experiments/snapshots/dapo-clip-higher/plan.json)与[Hydra配置](experiments/snapshots/dapo-clip-higher/config.yaml)。
 
-## 使用范围
+以上入口与隔离运行目录中实际执行的SHA绑定副本逐字节相同。
+`experiments/snapshots/dapo-clip-higher/bound/`保留实际执行位置对应的原件，
+[版本清单](experiments/snapshots/dapo-clip-higher/version.json)给出原路径、提交路径与SHA映射。
 
-这是可审查的源码与实验身份快照，保存动作不启动训练。
-归档计划保留当时的绝对路径、run ID和输出目录；直接重跑旧计划会被入口的已有输出检查拒绝。
-若安排新实验，应在新运行身份下重绑定路径和SHA，使用`epo`环境与CUDA GPU，
-并先取得checkpoint清单指向的E51祖先权重。重绑定后的实验不能冒充历史原运行。
+## 训练与停止证据
 
-## 验证
+- W&B：[e1e2f5f3f82e41a9](https://wandb.ai/leo-ucbm-university-of-california-berkeley/EPO-reproduction/runs/e1e2f5f3f82e41a9)。
+- E51祖先frame5,000,069,120，祖先训练seed43，continuation seed36001。
+- 原计划：连续6104轮，新增2,000,158,720帧。
+- 实际返回1623个完整epoch；1624轮已进入，环境step累计返回532,152,320帧。
+- 已保存100,270,080和500,039,680新增帧的里程碑；没有2B终点checkpoint。
+- [checkpoint身份](experiments/snapshots/dapo-clip-higher/checkpoints.json)、[实际训练摘要](experiments/snapshots/dapo-clip-higher/training_summary.json)、[用户停止收据](experiments/snapshots/dapo-clip-higher/user_stop_receipt.json)。
 
-535份训练时源码全部与原`source_manifest.json`逐字节相同。
-额外归档配置、摘要和来源，共560份文件通过逐字节核验；两组各两个seed的原始CSV
-均通过SHA验证并重新计算均值，与保存摘要一致。本次没有重新训练或改写历史结果。
+权重和大体积原始训练记录保留在既有本地/W&B归档，不加入Git。
+归档计划保留旧绝对路径、run ID和输出目录；直接重跑会被已有输出检查拒绝。
+新运行必须使用新身份、明确的起点权重与重新绑定的源码/配置SHA。
+本次仅进行版本保存、文件身份核验和语法检查，没有安排新的训练或评估。
+
+## 核验结果
+
+包含535份原核心源码的562个快照文件逐字节通过。
+新增入口、norm hook和监控helper与真实执行副本逐字节匹配；两个已保存checkpoint
+及E51祖先的SHA通过。历史最高结果依据仍在`experiments/snapshots/historical-best/`。

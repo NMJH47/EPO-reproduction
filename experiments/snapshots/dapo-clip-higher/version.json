@@ -1,0 +1,158 @@
+{
+  "active_curriculum": false,
+  "actor_ratio_clip_bounds": [
+    0.9,
+    1.2
+  ],
+  "actual_exit_code": -15,
+  "ancestor_checkpoint": "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/inputs/E51.pth",
+  "ancestor_training_seed": 43,
+  "captured_on": "2026-09-16",
+  "clip_parameter_scope": "full_model",
+  "completed_epochs": 1623,
+  "continuation_seed": 36001,
+  "evidence": [
+    {
+      "committed_path": "experiments/snapshots/dapo-clip-higher/plan.json",
+      "original_path": "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260916-structural-long/plans/clip_higher.json",
+      "sha256": "d7f8483e831bf88dc4ee52f2f6a488618488dc886db4ceed0de2891c2ee20b53"
+    },
+    {
+      "committed_path": "experiments/snapshots/dapo-clip-higher/config.yaml",
+      "original_path": "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260916-structural-long/plans/clip_higher.yaml",
+      "sha256": "f1e9bd657019952e43af3106b6720d83e6ff6d3f74b6b0d717ed5348dd28cfdd"
+    },
+    {
+      "committed_path": "experiments/snapshots/dapo-clip-higher/training_summary.json",
+      "original_path": "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260916-structural-long/training/clip_higher/summary.json",
+      "sha256": "4442a4e2610ba97ab00788d9661ce4e8044fb4888e46078e959970750a0bc9a2"
+    },
+    {
+      "committed_path": "experiments/snapshots/dapo-clip-higher/runtime_source_manifest.json",
+      "original_path": "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260916-structural-long/training/clip_higher/source_manifest.json",
+      "sha256": "45521383c271bbee131196ecf5b7de8be45623522e406a038402598a62bac5cc"
+    },
+    {
+      "committed_path": "experiments/snapshots/dapo-clip-higher/executed_training_config.yaml",
+      "original_path": "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260916-structural-long/training/clip_higher/executed_training_config.yaml",
+      "sha256": "109a5bdc8da3f355a61ae6f707532166b6082115f6cc56c94e6ee53990436e42"
+    },
+    {
+      "committed_path": "experiments/snapshots/dapo-clip-higher/training_start.json",
+      "original_path": "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260916-structural-long/training/clip_higher/training_start.json",
+      "sha256": "706371ef66524c5aeb32daa0f9e22ce1beb9678e3c8caa1da5f1ecdebf46a7c6"
+    },
+    {
+      "committed_path": "experiments/snapshots/dapo-clip-higher/user_stop_receipt.json",
+      "original_path": "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260916-structural-long/user_stop_request_20260916.json",
+      "sha256": "c8f2d3565b7fcd0c0f58493061d6713442b6fee595dde54c29e05e1d5fb2c17c"
+    },
+    {
+      "committed_path": "experiments/snapshots/dapo-clip-higher/study_plan.json",
+      "original_path": "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260916-structural-long/study_plan.json",
+      "sha256": "fd6b372cac8ae991a3a0b06b8b1e3fb6fd23bd8165ea53fd117452f6ce2229eb"
+    },
+    {
+      "committed_path": "experiments/snapshots/dapo-clip-higher/protocol.md",
+      "original_path": "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260916-structural-long/protocol.md",
+      "sha256": "094ac8dd08ec19b714e3312dcd7800902573358dc5bea73a310e850a8bcb87ba"
+    },
+    {
+      "committed_path": "experiments/snapshots/dapo-clip-higher/STRUCTURAL_LONG_PROTOCOL_20260916.md",
+      "original_path": "/home/ubuntu22/EPO/docs/research/STRUCTURAL_LONG_PROTOCOL_20260916.md",
+      "sha256": "094ac8dd08ec19b714e3312dcd7800902573358dc5bea73a310e850a8bcb87ba"
+    },
+    {
+      "committed_path": "experiments/snapshots/dapo-clip-higher/CODE_CHANGES_20260916.md",
+      "original_path": "/home/ubuntu22/EPO/docs/research/CODE_CHANGES_20260916.md",
+      "sha256": "e83ef33f1ee3c52ccbcd9a7a70ff9d6f1f3473ce010a3990af107435a15434b5"
+    },
+    {
+      "committed_path": "experiments/snapshots/dapo-clip-higher/DAPO_STUDY_IMPLEMENTATION_20260914.md",
+      "original_path": "/home/ubuntu22/EPO/docs/research/DAPO_STUDY_IMPLEMENTATION_20260914.md",
+      "sha256": "f76c0588c805365d39e64474aa219f4170f6ccfa00f5dc08352db54adc65782a"
+    }
+  ],
+  "files_are_archived_originals": true,
+  "model_weights_stored_in_git": false,
+  "planned_new_frames": 2000158720,
+  "returned_physical_frames": 532152320,
+  "run_id": "e1e2f5f3f82e41a9",
+  "source_bindings": [
+    {
+      "committed_path": "_research_support/cache_boundary_hooks.py",
+      "external_checkpoint": false,
+      "original_path": "/home/ubuntu22/EPO-experiments/frontier-20260914/_research_support/cache_boundary_hooks.py",
+      "sha256": "9279f86626adab941f001ce0b433d6745ad2379fe79821ce71f35e2c89809802",
+      "size_bytes": 11723
+    },
+    {
+      "committed_path": "_research_support/fresh_seal.py",
+      "external_checkpoint": false,
+      "original_path": "/home/ubuntu22/EPO-experiments/frontier-20260914/_research_support/fresh_seal.py",
+      "sha256": "26dcbb79462589f7ce2dc6db1182afabc1032a3c5bd6ae4080dea1a42a789d0a",
+      "size_bytes": 20472
+    },
+    {
+      "committed_path": null,
+      "external_checkpoint": true,
+      "original_path": "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/inputs/E51.pth",
+      "sha256": "de220625c407b463d41f9242cd652a40f5e48c253b4b9225b7817e452cf0f6be",
+      "size_bytes": 247819890
+    },
+    {
+      "committed_path": "experiments/snapshots/dapo-clip-higher/bound/artifacts/research/20260916-structural-long/plans/clip_higher.yaml",
+      "external_checkpoint": false,
+      "original_path": "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260916-structural-long/plans/clip_higher.yaml",
+      "sha256": "f1e9bd657019952e43af3106b6720d83e6ff6d3f74b6b0d717ed5348dd28cfdd",
+      "size_bytes": 9588
+    },
+    {
+      "committed_path": "experiments/snapshots/dapo-clip-higher/bound/artifacts/research/20260916-structural-long/protocol.md",
+      "external_checkpoint": false,
+      "original_path": "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260916-structural-long/protocol.md",
+      "sha256": "094ac8dd08ec19b714e3312dcd7800902573358dc5bea73a310e850a8bcb87ba",
+      "size_bytes": 7824
+    },
+    {
+      "committed_path": "experiments/snapshots/dapo-clip-higher/bound/artifacts/research/20260916-structural-long/support/clip_scope_hooks.py",
+      "external_checkpoint": false,
+      "original_path": "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260916-structural-long/support/clip_scope_hooks.py",
+      "sha256": "18a4f1ea25aa3d7ff893ad72781e0d008be4028c84356fa224bd1860176f8ef0",
+      "size_bytes": 9011
+    },
+    {
+      "committed_path": "experiments/snapshots/dapo-clip-higher/bound/artifacts/research/20260916-structural-long/support/run_structural_training.py",
+      "external_checkpoint": false,
+      "original_path": "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260916-structural-long/support/run_structural_training.py",
+      "sha256": "bb6051e576f44e62787d43202066da705d664bffebcfae2b28a6042bebdd1020",
+      "size_bytes": 50418
+    },
+    {
+      "committed_path": "scripts/research/dapo_actor.py",
+      "external_checkpoint": false,
+      "original_path": "/home/ubuntu22/EPO-experiments/frontier-20260914/scripts/research/dapo_actor.py",
+      "sha256": "9a4ee800b98574c50225d1f3af723a67cfb1ae86efcd7bf8077d153c114924e0",
+      "size_bytes": 4382
+    },
+    {
+      "committed_path": "scripts/research/frontier_curriculum.py",
+      "external_checkpoint": false,
+      "original_path": "/home/ubuntu22/EPO-experiments/frontier-20260914/scripts/research/frontier_curriculum.py",
+      "sha256": "d6510d09a6448b9afb3290513411701f2ad55d8a08d71eb98c5292c6677f7e38",
+      "size_bytes": 36331
+    },
+    {
+      "committed_path": "scripts/research/run_training_probe.py",
+      "external_checkpoint": false,
+      "original_path": "/home/ubuntu22/EPO-experiments/frontier-20260914/scripts/research/run_training_probe.py",
+      "sha256": "ce7cf8bc8788b3817c113cbb3f6eb1e9cf1e5ad0add5ca06b97ca14c75bb4f61",
+      "size_bytes": 16987
+    }
+  ],
+  "source_worktree": "/home/ubuntu22/EPO-experiments/frontier-20260914",
+  "status": "user_stopped_incomplete_experiment",
+  "training_plan_sha256": "d7f8483e831bf88dc4ee52f2f6a488618488dc886db4ceed0de2891c2ee20b53",
+  "variant": "dapo-clip-higher",
+  "wandb_url": "https://wandb.ai/leo-ucbm-university-of-california-berkeley/EPO-reproduction/runs/e1e2f5f3f82e41a9"
+}

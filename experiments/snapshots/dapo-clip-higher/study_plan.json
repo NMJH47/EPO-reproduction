@@ -1,0 +1,734 @@
+{
+  "analysis_entry": "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260916-structural-long/support/analyze_structural_pair.py",
+  "analysis_specs": {
+    "clip_higher-1526": {
+      "output": "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260916-structural-long/analysis/clip_higher-1526",
+      "run_id": "9dc8fad6c85e4ff6"
+    },
+    "clip_higher-3052": {
+      "output": "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260916-structural-long/analysis/clip_higher-3052",
+      "run_id": "9c648e16a1904bfd"
+    },
+    "clip_higher-306": {
+      "output": "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260916-structural-long/analysis/clip_higher-306",
+      "run_id": "e778de595d75495c"
+    },
+    "clip_higher-6104": {
+      "output": "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260916-structural-long/analysis/clip_higher-6104",
+      "run_id": "eb27abea608a4c21"
+    },
+    "owned_clip-1526": {
+      "output": "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260916-structural-long/analysis/owned_clip-1526",
+      "run_id": "bc2bde738d6f4540"
+    },
+    "owned_clip-3052": {
+      "output": "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260916-structural-long/analysis/owned_clip-3052",
+      "run_id": "0693b9ec25ea4d45"
+    },
+    "owned_clip-306": {
+      "output": "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260916-structural-long/analysis/owned_clip-306",
+      "run_id": "be0f8dd0f3194313"
+    },
+    "owned_clip-6104": {
+      "output": "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260916-structural-long/analysis/owned_clip-6104",
+      "run_id": "2a76ef926e244cfe"
+    }
+  },
+  "automatic_training_retry": false,
+  "base_source": "/home/ubuntu22/EPO-experiments/frontier-20260914/scripts/research/run_training_probe.py",
+  "clip_source": "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260916-structural-long/support/clip_scope_hooks.py",
+  "cuda_fixture_actual_wait": "/home/ubuntu22/EPO/artifacts/research/20260916-review/next/cuda_fixture_v2_actual_wait.json",
+  "cuda_fixture_entry": "/home/ubuntu22/EPO/artifacts/research/20260916-review/next/qualify_clip_hooks_cuda_v2.py",
+  "cuda_fixture_result": "/home/ubuntu22/EPO/artifacts/research/20260916-review/next/cuda-fixture-v2/summary.json",
+  "entity": "leo-ucbm-university-of-california-berkeley",
+  "evaluation_entry": "/home/ubuntu22/EPO-experiments/frontier-20260914/scripts/research/run_dapo_evaluation.py",
+  "evaluation_specs": {
+    "clip_higher": [
+      {
+        "eval_seed": 17001,
+        "monitor_output": "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260913-audit/monitor-structural-eval-clip_higher-306-17001",
+        "monitor_run_id": "045ef777d82e428c",
+        "output": "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260916-structural-long/evaluations/clip_higher-306-17001",
+        "relative_epoch": 306,
+        "run_id": "d5b3c3fd134741ba"
+      },
+      {
+        "eval_seed": 17002,
+        "monitor_output": "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260913-audit/monitor-structural-eval-clip_higher-306-17002",
+        "monitor_run_id": "6839e0978a524e6d",
+        "output": "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260916-structural-long/evaluations/clip_higher-306-17002",
+        "relative_epoch": 306,
+        "run_id": "a411ffbe277841b0"
+      },
+      {
+        "eval_seed": 17001,
+        "monitor_output": "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260913-audit/monitor-structural-eval-clip_higher-1526-17001",
+        "monitor_run_id": "131908815b2b48ff",
+        "output": "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260916-structural-long/evaluations/clip_higher-1526-17001",
+        "relative_epoch": 1526,
+        "run_id": "af603dbb3ab2422e"
+      },
+      {
+        "eval_seed": 17002,
+        "monitor_output": "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260913-audit/monitor-structural-eval-clip_higher-1526-17002",
+        "monitor_run_id": "6e500e9352b34539",
+        "output": "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260916-structural-long/evaluations/clip_higher-1526-17002",
+        "relative_epoch": 1526,
+        "run_id": "5cd3480e858545df"
+      },
+      {
+        "eval_seed": 17001,
+        "monitor_output": "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260913-audit/monitor-structural-eval-clip_higher-3052-17001",
+        "monitor_run_id": "45e76b355e434eb5",
+        "output": "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260916-structural-long/evaluations/clip_higher-3052-17001",
+        "relative_epoch": 3052,
+        "run_id": "3e2b84eed2ef48c0"
+      },
+      {
+        "eval_seed": 17002,
+        "monitor_output": "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260913-audit/monitor-structural-eval-clip_higher-3052-17002",
+        "monitor_run_id": "19ad8380c46d4947",
+        "output": "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260916-structural-long/evaluations/clip_higher-3052-17002",
+        "relative_epoch": 3052,
+        "run_id": "c3f213b7611c4d81"
+      },
+      {
+        "eval_seed": 17001,
+        "monitor_output": "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260913-audit/monitor-structural-eval-clip_higher-6104-17001",
+        "monitor_run_id": "395e7e28fe7a4256",
+        "output": "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260916-structural-long/evaluations/clip_higher-6104-17001",
+        "relative_epoch": 6104,
+        "run_id": "31de901717154ba6"
+      },
+      {
+        "eval_seed": 17002,
+        "monitor_output": "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260913-audit/monitor-structural-eval-clip_higher-6104-17002",
+        "monitor_run_id": "7a9562e6952248a6",
+        "output": "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260916-structural-long/evaluations/clip_higher-6104-17002",
+        "relative_epoch": 6104,
+        "run_id": "de54aa38596b4517"
+      }
+    ],
+    "owned_clip": [
+      {
+        "eval_seed": 17001,
+        "monitor_output": "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260913-audit/monitor-structural-eval-owned_clip-306-17001",
+        "monitor_run_id": "4fd23ad3a59e4568",
+        "output": "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260916-structural-long/evaluations/owned_clip-306-17001",
+        "relative_epoch": 306,
+        "run_id": "d522047a6530491b"
+      },
+      {
+        "eval_seed": 17002,
+        "monitor_output": "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260913-audit/monitor-structural-eval-owned_clip-306-17002",
+        "monitor_run_id": "f0fc5cf0cfea4cdc",
+        "output": "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260916-structural-long/evaluations/owned_clip-306-17002",
+        "relative_epoch": 306,
+        "run_id": "b9a9e904268e419a"
+      },
+      {
+        "eval_seed": 17001,
+        "monitor_output": "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260913-audit/monitor-structural-eval-owned_clip-1526-17001",
+        "monitor_run_id": "5f888088a0e34ba4",
+        "output": "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260916-structural-long/evaluations/owned_clip-1526-17001",
+        "relative_epoch": 1526,
+        "run_id": "0ba06c178470490d"
+      },
+      {
+        "eval_seed": 17002,
+        "monitor_output": "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260913-audit/monitor-structural-eval-owned_clip-1526-17002",
+        "monitor_run_id": "b6bf0d3d1769478d",
+        "output": "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260916-structural-long/evaluations/owned_clip-1526-17002",
+        "relative_epoch": 1526,
+        "run_id": "18481a9feb2043d7"
+      },
+      {
+        "eval_seed": 17001,
+        "monitor_output": "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260913-audit/monitor-structural-eval-owned_clip-3052-17001",
+        "monitor_run_id": "6ea4efc65f414dfd",
+        "output": "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260916-structural-long/evaluations/owned_clip-3052-17001",
+        "relative_epoch": 3052,
+        "run_id": "eff7634bb8de4922"
+      },
+      {
+        "eval_seed": 17002,
+        "monitor_output": "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260913-audit/monitor-structural-eval-owned_clip-3052-17002",
+        "monitor_run_id": "67defbabf9bb4243",
+        "output": "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260916-structural-long/evaluations/owned_clip-3052-17002",
+        "relative_epoch": 3052,
+        "run_id": "f53bc21e30e74e54"
+      },
+      {
+        "eval_seed": 17001,
+        "monitor_output": "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260913-audit/monitor-structural-eval-owned_clip-6104-17001",
+        "monitor_run_id": "8aeddabe0ac74457",
+        "output": "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260916-structural-long/evaluations/owned_clip-6104-17001",
+        "relative_epoch": 6104,
+        "run_id": "d49c963f8d844884"
+      },
+      {
+        "eval_seed": 17002,
+        "monitor_output": "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260913-audit/monitor-structural-eval-owned_clip-6104-17002",
+        "monitor_run_id": "57ddd485e8fe46a7",
+        "output": "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260916-structural-long/evaluations/owned_clip-6104-17002",
+        "relative_epoch": 6104,
+        "run_id": "b0532128f22f4100"
+      }
+    ]
+  },
+  "evaluator_source": "/home/ubuntu22/EPO-experiments/frontier-20260914/scripts/evaluate_frozen_checkpoint.py",
+  "execution_ready": true,
+  "execution_root": "/home/ubuntu22/EPO-experiments/frontier-20260914",
+  "files_sha256": {
+    "/home/ubuntu22/EPO-experiments/frontier-20260914/_research_support/cache_boundary_hooks.py": "9279f86626adab941f001ce0b433d6745ad2379fe79821ce71f35e2c89809802",
+    "/home/ubuntu22/EPO-experiments/frontier-20260914/_research_support/fresh_seal.py": "26dcbb79462589f7ce2dc6db1182afabc1032a3c5bd6ae4080dea1a42a789d0a",
+    "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/inputs/E51.pth": "de220625c407b463d41f9242cd652a40f5e48c253b4b9225b7817e452cf0f6be",
+    "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260914-long-budget/evaluations/control-1526-17001/episodes.csv": "3bc763ebf705dfe6382538566dea3eb8820d048fcde2729b00a5ad23d733c8e8",
+    "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260914-long-budget/evaluations/control-1526-17001/protocol.json": "be23e7b47c49cff5fe9dba144fb68d461231e113085afd1ebeb62528557487da",
+    "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260914-long-budget/evaluations/control-1526-17001/summary.json": "f3acbcf04bd51a4cdad111f9cb933617b9bdcfab1ec3109b59bfe981e5c45723",
+    "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260914-long-budget/evaluations/control-1526-17001/wandb_run.json": "35f4362e1ed9eb699d2790595321daf137e742af28e3f319b6ad5518670cea89",
+    "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260914-long-budget/evaluations/control-306-17001/episodes.csv": "ef2777c2b102ae78f22d58e5a554293a4e3f959e5cb0f09d72a06ea120af765a",
+    "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260914-long-budget/evaluations/control-306-17001/protocol.json": "5ab7e5473daa51f514274a8a27ad94d5d3337f16e883bf8b49968246abbb97dd",
+    "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260914-long-budget/evaluations/control-306-17001/summary.json": "361cfbc607624d0fdfe19071dad994cf16e5702f94db52896f2c221c186789c9",
+    "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260914-long-budget/evaluations/control-306-17001/wandb_run.json": "2049ae1b57bdc33ff629b0d6610fc3e5fa25da850c72dd7661e58e4a52147bf3",
+    "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260914-long-budget/evaluations/control-306-17002/episodes.csv": "bf2b388653d0fecdb595faa4822e1970c1ca36e39982b7148c3a881dbaab2475",
+    "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260914-long-budget/evaluations/control-306-17002/protocol.json": "347acfcb4d0e945f405764dd933eecc9746e17703f4100a6a30ae26a97bf20e4",
+    "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260914-long-budget/evaluations/control-306-17002/summary.json": "9b14b306117b9e96218335df3e092f76a3b47d9daf3c28e9cb34762651050f91",
+    "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260914-long-budget/evaluations/control-306-17002/wandb_run.json": "019dd848aa5b6c92794d4591bc8fa3807eebde640337ce2a8dabd889682fb00c",
+    "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260914-long-budget/training/control/summary.json": "9c2d56de6c40eea77919e84fe2caf2c24a8d5c2a1307cb3f024616f51d224d82",
+    "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260916-recovery/controller-publication.json": "b562037cc4036570a7869e2142eb279dee24c1986d934498486b74e5f373c570",
+    "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260916-recovery/controller/all_evaluations.json": "eeec8b8021d71edefd682b4804712f12be25fbace6c5fb47e78f1a40ba903e1a",
+    "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260916-recovery/evaluations/control-1526-17002/episodes.csv": "475d0883d32e515afa5b075dbf464652280db76cff0f048a1b0f310442b05b45",
+    "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260916-recovery/evaluations/control-1526-17002/protocol.json": "4a1506ae939eb90859f5e92a611fd96918cbb55b5e4a810506732f3fda3406d7",
+    "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260916-recovery/evaluations/control-1526-17002/summary.json": "04fda379592eb87eb42dcb88fa85293b8dd302d6383145583d0f477669d3c325",
+    "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260916-recovery/evaluations/control-1526-17002/wandb_run.json": "e0aade08b50cf295bd3fe0b803ee51986bf9290edb4ed9bbc9124a29c4727670",
+    "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260916-recovery/evaluations/control-3052-17001/episodes.csv": "b3a37a39d4c695f24d8ec6193ca21d94737d56d75ae960a84e73f0905589da00",
+    "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260916-recovery/evaluations/control-3052-17001/protocol.json": "7586ccbaf4750ae3946aeaf5f21a3f20db4472b99726d65e399ce269dfa939fa",
+    "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260916-recovery/evaluations/control-3052-17001/summary.json": "eb6debf51f77c3beee9f49df71fab81f911a0cf86ae17cbbf80456361b5fdffc",
+    "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260916-recovery/evaluations/control-3052-17001/wandb_run.json": "9369699f6e87eddfd45eb6661c5d62afadffc774c01fbdbb263695928b6c14bb",
+    "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260916-recovery/evaluations/control-3052-17002/episodes.csv": "5d2bc19a22473cdbcaabde18a400535606c2fb1b34ffee4036cc39f8ad0fbb97",
+    "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260916-recovery/evaluations/control-3052-17002/protocol.json": "ea85abd09c5758b924bc8c609c7fd6fff1a4c49b7124b66652c9edbe0f8c3d6d",
+    "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260916-recovery/evaluations/control-3052-17002/summary.json": "5ba2b373809518a4ce703e798aae1deb904006fa06e701ec3de564fbd8e50293",
+    "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260916-recovery/evaluations/control-3052-17002/wandb_run.json": "d392ee424a42ee7e3e677e90965c300c8d413137968279d25e354fc74efaa108",
+    "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260916-recovery/evaluations/control-6104-17001/episodes.csv": "4cf54a79af1ee5948e6f9d20ce16189cd591a3dc9471308c1207b975c200ac22",
+    "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260916-recovery/evaluations/control-6104-17001/protocol.json": "1db89f7e031d7abff4e756b6b9e5f5fe374333a0f4c126842e966331e7a32099",
+    "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260916-recovery/evaluations/control-6104-17001/summary.json": "5b017021488618acf5ef1425f08677ad86b90a5ce3948adb28ac776f5496b084",
+    "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260916-recovery/evaluations/control-6104-17001/wandb_run.json": "189927412795637da0e85fa7e45dd5434418f7a9d5421c8ef645ebdc60e9c63b",
+    "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260916-recovery/evaluations/control-6104-17002/episodes.csv": "34f0108ab7d2157f66c537b28375657daaa0cdb5acc9068d91d8ec16e49f595e",
+    "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260916-recovery/evaluations/control-6104-17002/protocol.json": "2e20e3663c0efe308a82b1bb922772177ccd2172bf87b44eb3099a80788d6621",
+    "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260916-recovery/evaluations/control-6104-17002/summary.json": "f09d82b04de81f345bed4a27cba6c75d6a7f491e0dc13eb58b7489bc5edab600",
+    "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260916-recovery/evaluations/control-6104-17002/wandb_run.json": "b7ecf19db84687cec27d5c8b15dd26681b048d61490f6891c3a040203cc6c518",
+    "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260916-structural-long/plans/clip_higher.json": "d7f8483e831bf88dc4ee52f2f6a488618488dc886db4ceed0de2891c2ee20b53",
+    "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260916-structural-long/plans/clip_higher.yaml": "f1e9bd657019952e43af3106b6720d83e6ff6d3f74b6b0d717ed5348dd28cfdd",
+    "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260916-structural-long/plans/config_delta_manifest.json": "4d2057bb363c7e2cf69b51e8d8eead2267a8ee28f9ea5d3c3841fb3479b20766",
+    "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260916-structural-long/plans/owned_clip.json": "36b787de0d462d723c97e52fd3403ba60a54367343ebe5a33045e3aa538ae828",
+    "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260916-structural-long/plans/owned_clip.yaml": "3ddbf78e0cd28bf85c76598502fd330a91f1a3ebf8eb86227e0e11c089c651c6",
+    "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260916-structural-long/plans/q_clip_higher.json": "f78dd16af52d1e3f4b789cfb9267379e92cc3c2324fe2231c4d8427f3bde861e",
+    "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260916-structural-long/plans/q_clip_higher.yaml": "62bd369409851097531014ac1d3e9ad9b518219d558601a0d5db1c0f43542797",
+    "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260916-structural-long/plans/q_control.json": "1d0247c00faf3937e918d4731b252269e3354d42089ea6c7213ac9674bb21945",
+    "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260916-structural-long/plans/q_control.yaml": "5ee11d956505f17c73ac0cd3bb3ac3b65150dd9896b987233c86261a74625dcc",
+    "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260916-structural-long/plans/q_owned_clip.json": "6c4e903f8440a84f209e549286686637b4d9d1c90b6ac290da87b50aef0ed452",
+    "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260916-structural-long/plans/q_owned_clip.yaml": "af5045f8af35a79b6cf036b1160071d60981e2845bded8a30594c7f1bb7ed5d6",
+    "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260916-structural-long/protocol.md": "094ac8dd08ec19b714e3312dcd7800902573358dc5bea73a310e850a8bcb87ba",
+    "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260916-structural-long/support/analyze_structural_pair.py": "2dd6fa292811f981a1f4248465a665e7631db28f672fd253978ef9fef980cf38",
+    "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260916-structural-long/support/clip_scope_hooks.py": "18a4f1ea25aa3d7ff893ad72781e0d008be4028c84356fa224bd1860176f8ef0",
+    "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260916-structural-long/support/monitor_job_consistent.py": "b931c6446e60e0771e3afa311634e58f42938a52980e546eae63572760a659ec",
+    "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260916-structural-long/support/run_structural_study.py": "e49372d92b40e7d92403aa3de3674d617470b0dfd63d94a4020dd7dd3a9f7e7d",
+    "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260916-structural-long/support/run_structural_training.py": "bb6051e576f44e62787d43202066da705d664bffebcfae2b28a6042bebdd1020",
+    "/home/ubuntu22/EPO-experiments/frontier-20260914/scripts/evaluate_frozen_checkpoint.py": "677ced2d8475fbf5a1f553bd3e8ff46ae65ecefcca815acb40b60569abee8b82",
+    "/home/ubuntu22/EPO-experiments/frontier-20260914/scripts/research/dapo_actor.py": "9a4ee800b98574c50225d1f3af723a67cfb1ae86efcd7bf8077d153c114924e0",
+    "/home/ubuntu22/EPO-experiments/frontier-20260914/scripts/research/frontier_curriculum.py": "d6510d09a6448b9afb3290513411701f2ad55d8a08d71eb98c5292c6677f7e38",
+    "/home/ubuntu22/EPO-experiments/frontier-20260914/scripts/research/run_dapo_evaluation.py": "806d922ec6ecc920378bf9868e594bc26889734a9d13969fa5009b1148ecaa35",
+    "/home/ubuntu22/EPO-experiments/frontier-20260914/scripts/research/run_dapo_resource_monitor.py": "b0275ba4fb2439bab78af552642289540f7b829b29ef9b5a2c4ffc075f769ef7",
+    "/home/ubuntu22/EPO-experiments/frontier-20260914/scripts/research/run_dapo_study.py": "d1a34a50663a849f1d45531181d53b36cf68b265e1fa575938c4f0b9daf9c6fd",
+    "/home/ubuntu22/EPO-experiments/frontier-20260914/scripts/research/run_long_budget_study.py": "1644543338b36907c163c6faed69a2c031c0d0ede2eef80311c5400352d7e6ef",
+    "/home/ubuntu22/EPO-experiments/frontier-20260914/scripts/research/run_training_probe.py": "ce7cf8bc8788b3817c113cbb3f6eb1e9cf1e5ad0add5ca06b97ca14c75bb4f61",
+    "/home/ubuntu22/EPO/artifacts/research/20260916-review/algorithm/REPORT.md": "155897b020ae61c3e828f3c868f1444654b28c16bccec06c89e22ebd7199dba1",
+    "/home/ubuntu22/EPO/artifacts/research/20260916-review/literature/REPORT.md": "6a8b4261515e766bbfba0fef15578e688bf5e3dc991c39a424a5cd0839d4e79e",
+    "/home/ubuntu22/EPO/artifacts/research/20260916-review/next/ANALYZER_README.md": "0d9b28966a07a8255d004b547fc49d6660a3ec201694433a28b75189f94f56f2",
+    "/home/ubuntu22/EPO/artifacts/research/20260916-review/next/CLIP_FIXTURE_README.md": "0fb4c5140e4e77a6c1e4bbf262d54e907c446bfb668a432d6d6d02444159651d",
+    "/home/ubuntu22/EPO/artifacts/research/20260916-review/next/CLIP_FIXTURE_V2_README.md": "1db06ce6f9f412d7635db321c2cef4740f90f12492eaea1087e42d8c4c3a4f87",
+    "/home/ubuntu22/EPO/artifacts/research/20260916-review/next/STRUCTURAL_SOURCE_REVIEW.md": "3fc8e9cdbf251ea3c6558abaf25a4170699eaf70ea61918f259f353ec4d02d24",
+    "/home/ubuntu22/EPO/artifacts/research/20260916-review/next/STRUCTURAL_TRAINING_DESIGN.md": "4f672e314bf03ba2bca35b0d19ff3b4066e35b50232abb586bd7bc0ea3ff0d29",
+    "/home/ubuntu22/EPO/artifacts/research/20260916-review/next/analyze_long_budget_pair.before.py": "fe36c0e2a88079fdf268271d500b8ac2689458215589fee5793636d28cf47f0f",
+    "/home/ubuntu22/EPO/artifacts/research/20260916-review/next/analyze_structural_pair.py": "2dd6fa292811f981a1f4248465a665e7631db28f672fd253978ef9fef980cf38",
+    "/home/ubuntu22/EPO/artifacts/research/20260916-review/next/analyzer_cpu_controls.json": "c693a1d6ee464472953212d6c5d73c6b5b2f6ea21a108222cd9e2cd5c09eab35",
+    "/home/ubuntu22/EPO/artifacts/research/20260916-review/next/analyzer_identity.diff": "94aad68b5616df58b2d27520af671c5249b47b1034b396112c43199bf2ae5c86",
+    "/home/ubuntu22/EPO/artifacts/research/20260916-review/next/check_clip_fixture_cpu.py": "8f03ccbb9411e598ae252a0ba41cc8bb765b392a2750f57bd925b5dd900ff0c3",
+    "/home/ubuntu22/EPO/artifacts/research/20260916-review/next/check_clip_fixture_v2_cpu.py": "30257814f71d8bb2c88f3aad962fdd58726231e162f5418676941b76ab286631",
+    "/home/ubuntu22/EPO/artifacts/research/20260916-review/next/check_structural_cpu.py": "708427f2f2f1e4f63d0fb8e15514375a09eeb46f273c5501bfdb13e18710e404",
+    "/home/ubuntu22/EPO/artifacts/research/20260916-review/next/clip_fixture_cleanup.diff": "a1d2f043b388059cbb3006e14ccdaf0a3e31ee372db88eb6b377401f640c0f34",
+    "/home/ubuntu22/EPO/artifacts/research/20260916-review/next/clip_fixture_v1_incident.json": "da374a4b0227a52ac095394e17c3bc8c54b3ac053000adb664787c2bcb07a112",
+    "/home/ubuntu22/EPO/artifacts/research/20260916-review/next/clip_fixture_v2.diff": "a0a42d69572b87d5e87073fec126352d489c796dd0bdedd3aa5188c90e9aedad",
+    "/home/ubuntu22/EPO/artifacts/research/20260916-review/next/clip_scope_hooks.py": "18a4f1ea25aa3d7ff893ad72781e0d008be4028c84356fa224bd1860176f8ef0",
+    "/home/ubuntu22/EPO/artifacts/research/20260916-review/next/cuda-fixture-v2/dynamic_owned_hook/norms.jsonl": "c345a6029ac0ed546a35b4ea92d10edc6d9ec824f077e6698e0662ad45e41e55",
+    "/home/ubuntu22/EPO/artifacts/research/20260916-review/next/cuda-fixture-v2/excluded_inf_full_hook/norms.jsonl": "024db2f4a83e0776cafef3399d3d179a5907815f1d1b4f3805c903d2a2218d08",
+    "/home/ubuntu22/EPO/artifacts/research/20260916-review/next/cuda-fixture-v2/excluded_inf_owned_hook/norms.jsonl": "7d90f8160bbfe1d1bbc111b173a1cd2748df3f0abb798bd8a02d4121f2b1dce6",
+    "/home/ubuntu22/EPO/artifacts/research/20260916-review/next/cuda-fixture-v2/excluded_nan_full_hook/norms.jsonl": "75dba255daecabb25b2587d9a0a6d3b88186b403d4158da9d6d919f6b5a92d6d",
+    "/home/ubuntu22/EPO/artifacts/research/20260916-review/next/cuda-fixture-v2/finite_hook_clip_higher/norms.jsonl": "604e19db7eb5dbc15a1f045006a9808607e0c103e5f2233f14c5467d75937a6a",
+    "/home/ubuntu22/EPO/artifacts/research/20260916-review/next/cuda-fixture-v2/finite_hook_control/norms.jsonl": "4e71b4b2f2abb260fd79015d6f8a274aa3309c0d228c0e0241060426c66c2b41",
+    "/home/ubuntu22/EPO/artifacts/research/20260916-review/next/cuda-fixture-v2/finite_owned_hook/norms.jsonl": "3e0a5f235192778d94b72631151a682fb2372e7ae88db712858e3f5cb151f12d",
+    "/home/ubuntu22/EPO/artifacts/research/20260916-review/next/cuda-fixture-v2/owned_inf_owned_hook/norms.jsonl": "bf84c850fe6504a74885da4731fb16a3b891cdd0aedbfe90d9b8e2dc8fb59eaf",
+    "/home/ubuntu22/EPO/artifacts/research/20260916-review/next/cuda-fixture-v2/source_manifest.json": "54ff045b933e274a3e9cee7726ff5f49b06602e8d2afe062bb49cd2c9d818d5d",
+    "/home/ubuntu22/EPO/artifacts/research/20260916-review/next/cuda-fixture-v2/sources/00_qualify_clip_hooks_cuda_v2.py": "519b3f7bafe26b786aa717a5cee751e8b8aabb66f3d09bc1ccac984f1d22b285",
+    "/home/ubuntu22/EPO/artifacts/research/20260916-review/next/cuda-fixture-v2/sources/01_clip_scope_hooks.py": "18a4f1ea25aa3d7ff893ad72781e0d008be4028c84356fa224bd1860176f8ef0",
+    "/home/ubuntu22/EPO/artifacts/research/20260916-review/next/cuda-fixture-v2/sources/02_clip_grad.py": "2e6ab668acfbf9d101bfe34e2d59058e8790f0c62c6d048573028b91805fe172",
+    "/home/ubuntu22/EPO/artifacts/research/20260916-review/next/cuda-fixture-v2/sources/03_grad_scaler.py": "968265eac363742fcbea6d9138f91a27e01a25aa11bc761c80adae21c6133731",
+    "/home/ubuntu22/EPO/artifacts/research/20260916-review/next/cuda-fixture-v2/summary.json": "cf521af160972b0687678a57f64728b3ec64808cc77f98b67d29775f1f318f44",
+    "/home/ubuntu22/EPO/artifacts/research/20260916-review/next/cuda-fixture-v2/synthetic_raw.pt": "bbc6115de8ed1f16dc4cf7d1e34738871058cfa904d45696b3b21d6223f5a9a1",
+    "/home/ubuntu22/EPO/artifacts/research/20260916-review/next/cuda-fixture/entry_failure.json": "f6907a838284f7b8a68768f43f50f115ce6a213311cc2e08832933a8b943f1c5",
+    "/home/ubuntu22/EPO/artifacts/research/20260916-review/next/cuda-fixture/finite_hook_control/norms.jsonl": "2a3f1f0b5fc7cea3e3199aaf17b33cc530ce79a26a697b470e3e0daaaed3ef9f",
+    "/home/ubuntu22/EPO/artifacts/research/20260916-review/next/cuda-fixture/source_manifest.json": "ff601c176874866bcc931b0530e70d0194b82d2b3cd5c3ce762af4d496b576de",
+    "/home/ubuntu22/EPO/artifacts/research/20260916-review/next/cuda-fixture/sources/00_qualify_clip_hooks_cuda.py": "c806200aae0c00132dc5f346f9e8f3afb37c9a07f465d4fb3ef6a67227d65a93",
+    "/home/ubuntu22/EPO/artifacts/research/20260916-review/next/cuda-fixture/sources/01_clip_scope_hooks.py": "18a4f1ea25aa3d7ff893ad72781e0d008be4028c84356fa224bd1860176f8ef0",
+    "/home/ubuntu22/EPO/artifacts/research/20260916-review/next/cuda-fixture/sources/02_clip_grad.py": "2e6ab668acfbf9d101bfe34e2d59058e8790f0c62c6d048573028b91805fe172",
+    "/home/ubuntu22/EPO/artifacts/research/20260916-review/next/cuda-fixture/sources/03_grad_scaler.py": "968265eac363742fcbea6d9138f91a27e01a25aa11bc761c80adae21c6133731",
+    "/home/ubuntu22/EPO/artifacts/research/20260916-review/next/cuda-fixture/summary.json": "2ec372754aadc4fbecbf577acf6976f52847005a5cb6fb48a1f3c63527b2e2ea",
+    "/home/ubuntu22/EPO/artifacts/research/20260916-review/next/cuda-fixture/synthetic_raw.pt": "74e05a7675c2539446543fec40588f317d49e5257ba6414770ad7c07d2ffe691",
+    "/home/ubuntu22/EPO/artifacts/research/20260916-review/next/cuda_fixture_actual_wait.json": "4cea705580cc4883c486789d68f90bc843f6eaa458c3aff916744577ddfd1b1b",
+    "/home/ubuntu22/EPO/artifacts/research/20260916-review/next/cuda_fixture_stdout.log": "8677de944ba67ab8fae3b02fe9f441291dc63e5cb5437fbd532ea656e322259b",
+    "/home/ubuntu22/EPO/artifacts/research/20260916-review/next/cuda_fixture_v2_actual_wait.json": "dba151df1f9588cd4421a25928ece59a28f2867a72d04ad70bd0c29161c83744",
+    "/home/ubuntu22/EPO/artifacts/research/20260916-review/next/cuda_fixture_v2_stdout.log": "5f2ec554ad4b6cc20e0056a5f912897098e4305971d5ac1aa32aca7788ef983a",
+    "/home/ubuntu22/EPO/artifacts/research/20260916-review/next/fixture_cpu_controls.json": "e8b9d0146f3236a848a26152a2a0c5d4cc6f0fc25802875123b8a75862d598ab",
+    "/home/ubuntu22/EPO/artifacts/research/20260916-review/next/fixture_v2_cpu_controls.json": "d222dbd37c764aea74e8d86020738e5d8355e4699a97eb3bfe24c7ca6c341a0b",
+    "/home/ubuntu22/EPO/artifacts/research/20260916-review/next/launch_fixture.py": "fd6175e591d56934bd88649776f8e0e35235805bb0f38901612124d917b1cf90",
+    "/home/ubuntu22/EPO/artifacts/research/20260916-review/next/launch_fixture_v2.py": "31a0c310ecbbdeb0b7324ffaca787e3cb6535fe3583d73384c020bbbbd5054d8",
+    "/home/ubuntu22/EPO/artifacts/research/20260916-review/next/prepare_structural_plans.py": "110cff30ffa8fb204e5a26acbb0addaa03e5be338c992b8b9b1dc84371f0678e",
+    "/home/ubuntu22/EPO/artifacts/research/20260916-review/next/qualify_clip_hooks_cuda.before_cleanup.py": "f713b6114adca7dea3244a345782c0dcbce5dbacd6d2a4e4a72574c92b4e5dfc",
+    "/home/ubuntu22/EPO/artifacts/research/20260916-review/next/qualify_clip_hooks_cuda.py": "c806200aae0c00132dc5f346f9e8f3afb37c9a07f465d4fb3ef6a67227d65a93",
+    "/home/ubuntu22/EPO/artifacts/research/20260916-review/next/qualify_clip_hooks_cuda_v2.before.py": "c806200aae0c00132dc5f346f9e8f3afb37c9a07f465d4fb3ef6a67227d65a93",
+    "/home/ubuntu22/EPO/artifacts/research/20260916-review/next/qualify_clip_hooks_cuda_v2.py": "519b3f7bafe26b786aa717a5cee751e8b8aabb66f3d09bc1ccac984f1d22b285",
+    "/home/ubuntu22/EPO/artifacts/research/20260916-review/next/run_structural_study.py": "e49372d92b40e7d92403aa3de3674d617470b0dfd63d94a4020dd7dd3a9f7e7d",
+    "/home/ubuntu22/EPO/artifacts/research/20260916-review/next/run_structural_training.py": "bb6051e576f44e62787d43202066da705d664bffebcfae2b28a6042bebdd1020",
+    "/home/ubuntu22/EPO/artifacts/research/20260916-review/next/run_structural_training.py.before": "0582a2ac21b99b8bb54c413825e6eb705d744504ef52350c49985e05d3969c18",
+    "/home/ubuntu22/EPO/artifacts/research/20260916-review/next/structural_cpu_report.json": "d2375f7ffbe4cce0c47ae5a84b097d5c6011448c1cfb5a2789a8635a1f43d725",
+    "/home/ubuntu22/EPO/artifacts/research/20260916-review/next/structural_preparation_manifest.json": "ed48248d0a10ac5eb51b6d77782b9430661bc08d1be76604669b30a85a30f4fb",
+    "/home/ubuntu22/EPO/artifacts/research/20260916-review/next/structural_training.diff": "9662c49b243c98723027f568d2c5e8bccaad1ea5a509679f7ff3cc29bff90788",
+    "/home/ubuntu22/EPO/artifacts/research/20260916-review/runtime/REPORT.md": "5f93b24dc971697447b8bdfac3c7125b2dce61b5f728257d29f6a1b55fb21d21"
+  },
+  "group": "epo-structural-long-20260916",
+  "independent_training_seeds": 1,
+  "interpretation": "One shared E51 ancestor/continuation seed; existing control reused after byte-bound recovery; no fresh training replication claim.",
+  "learning_gate": false,
+  "legacy_controller_source": "/home/ubuntu22/EPO-experiments/frontier-20260914/scripts/research/run_dapo_study.py",
+  "long_controller_source": "/home/ubuntu22/EPO-experiments/frontier-20260914/scripts/research/run_long_budget_study.py",
+  "monitor_entry": "/home/ubuntu22/EPO-experiments/frontier-20260914/scripts/research/run_dapo_resource_monitor.py",
+  "monitor_source": "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260916-structural-long/support/monitor_job_consistent.py",
+  "nvml_source": "/home/ubuntu22/EPO-experiments/frontier-20260914/_research_support/cache_boundary_hooks.py",
+  "order": [
+    "clip_higher",
+    "owned_clip"
+  ],
+  "output": "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260916-structural-long/controller",
+  "project": "EPO-reproduction",
+  "protocol": "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260916-structural-long/protocol.md",
+  "purpose": "epo_fixed_structural_long_extension",
+  "qualification_jobs": [
+    {
+      "monitor_output": "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260913-audit/monitor-structural-q_control",
+      "monitor_run_id": "a4e8b78506f64188",
+      "plan_path": "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260916-structural-long/plans/q_control.json",
+      "plan_sha256": "1d0247c00faf3937e918d4731b252269e3354d42089ea6c7213ac9674bb21945"
+    },
+    {
+      "monitor_output": "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260913-audit/monitor-structural-q_clip_higher",
+      "monitor_run_id": "3403be9c54454f91",
+      "plan_path": "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260916-structural-long/plans/q_clip_higher.json",
+      "plan_sha256": "f78dd16af52d1e3f4b789cfb9267379e92cc3c2324fe2231c4d8427f3bde861e"
+    },
+    {
+      "monitor_output": "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260913-audit/monitor-structural-q_owned_clip",
+      "monitor_run_id": "feaba6d627874574",
+      "plan_path": "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260916-structural-long/plans/q_owned_clip.json",
+      "plan_sha256": "6c4e903f8440a84f209e549286686637b4d9d1c90b6ac290da87b50aef0ed452"
+    }
+  ],
+  "recovery_all_evaluations": "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260916-recovery/controller/all_evaluations.json",
+  "recovery_publication": "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260916-recovery/controller-publication.json",
+  "reference_evaluations": [
+    {
+      "actual_environment_control_frames": 4529501,
+      "checkpoint_sha256": "fdc6e92dca36e3dca9eb04db347e3029080a4c2f616119f8c381ba8315b555cd",
+      "episodes_csv": "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260914-long-budget/evaluations/control-306-17001/episodes.csv",
+      "eval_seed": 17001,
+      "monitor": {
+        "artifacts": [
+          {
+            "artifact": "job-resources-76be8aef94914605:v0",
+            "bytes": 18984,
+            "file_count": 4,
+            "state": "COMMITTED",
+            "type": "resource-telemetry"
+          }
+        ],
+        "run_id": "76be8aef94914605",
+        "state": "finished",
+        "verified_at": "2026-09-15T10:03:51.517886+00:00"
+      },
+      "protocol_json": "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260914-long-budget/evaluations/control-306-17001/protocol.json",
+      "relative_epoch": 306,
+      "remote": {
+        "artifacts": [
+          {
+            "artifact": "dapo-evaluation-plan-f7f6ae0ceea84209:v0",
+            "bytes": 76603,
+            "file_count": 7,
+            "state": "COMMITTED",
+            "type": "dapo-evaluation-plan"
+          },
+          {
+            "artifact": "frozen-evaluation-f7f6ae0ceea84209:v0",
+            "bytes": 1367732,
+            "file_count": 17,
+            "state": "COMMITTED",
+            "type": "evaluation"
+          }
+        ],
+        "run_id": "f7f6ae0ceea84209",
+        "state": "finished",
+        "verified_at": "2026-09-15T10:03:50.274622+00:00"
+      },
+      "run_id": "f7f6ae0ceea84209",
+      "status": "completed",
+      "summary_json": "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260914-long-budget/evaluations/control-306-17001/summary.json",
+      "training_run_id": "4742038629e04897"
+    },
+    {
+      "actual_environment_control_frames": 4806972,
+      "checkpoint_sha256": "fdc6e92dca36e3dca9eb04db347e3029080a4c2f616119f8c381ba8315b555cd",
+      "episodes_csv": "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260914-long-budget/evaluations/control-306-17002/episodes.csv",
+      "eval_seed": 17002,
+      "monitor": {
+        "artifacts": [
+          {
+            "artifact": "job-resources-32c15d098fd14c32:v0",
+            "bytes": 19213,
+            "file_count": 4,
+            "state": "COMMITTED",
+            "type": "resource-telemetry"
+          }
+        ],
+        "run_id": "32c15d098fd14c32",
+        "state": "finished",
+        "verified_at": "2026-09-15T10:06:38.434441+00:00"
+      },
+      "protocol_json": "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260914-long-budget/evaluations/control-306-17002/protocol.json",
+      "relative_epoch": 306,
+      "remote": {
+        "artifacts": [
+          {
+            "artifact": "dapo-evaluation-plan-d069c04520b742bb:v0",
+            "bytes": 76603,
+            "file_count": 7,
+            "state": "COMMITTED",
+            "type": "dapo-evaluation-plan"
+          },
+          {
+            "artifact": "frozen-evaluation-d069c04520b742bb:v0",
+            "bytes": 1368154,
+            "file_count": 17,
+            "state": "COMMITTED",
+            "type": "evaluation"
+          }
+        ],
+        "run_id": "d069c04520b742bb",
+        "state": "finished",
+        "verified_at": "2026-09-15T10:06:36.896998+00:00"
+      },
+      "run_id": "d069c04520b742bb",
+      "status": "completed",
+      "summary_json": "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260914-long-budget/evaluations/control-306-17002/summary.json",
+      "training_run_id": "4742038629e04897"
+    },
+    {
+      "actual_environment_control_frames": 4498250,
+      "checkpoint_sha256": "c332c19329cb08ad7518d26ef1801673ce133aaa2990f3ac052011b96b0c35ba",
+      "episodes_csv": "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260914-long-budget/evaluations/control-1526-17001/episodes.csv",
+      "eval_seed": 17001,
+      "incident_adjudication": "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260916-recovery/support/incident_verification.json",
+      "original_monitor_actual_exit_code": 1,
+      "protocol_json": "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260914-long-budget/evaluations/control-1526-17001/protocol.json",
+      "relative_epoch": 1526,
+      "remote": {
+        "artifacts": [
+          {
+            "artifact": "dapo-evaluation-plan-cb53a9331fcf4015:v0",
+            "bytes": 76609,
+            "file_count": 7,
+            "state": "COMMITTED",
+            "type": "dapo-evaluation-plan"
+          },
+          {
+            "artifact": "frozen-evaluation-cb53a9331fcf4015:v0",
+            "bytes": 1367838,
+            "file_count": 17,
+            "state": "COMMITTED",
+            "type": "evaluation"
+          }
+        ],
+        "run_id": "cb53a9331fcf4015",
+        "state": "finished",
+        "verified_at": "2026-09-15T20:24:05.954911+00:00"
+      },
+      "run_id": "cb53a9331fcf4015",
+      "status": "completed",
+      "summary_json": "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260914-long-budget/evaluations/control-1526-17001/summary.json",
+      "training_run_id": "4742038629e04897"
+    },
+    {
+      "actual_environment_control_frames": 5284260,
+      "checkpoint_sha256": "c332c19329cb08ad7518d26ef1801673ce133aaa2990f3ac052011b96b0c35ba",
+      "episodes_csv": "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260916-recovery/evaluations/control-1526-17002/episodes.csv",
+      "eval_seed": 17002,
+      "monitor": {
+        "artifacts": [
+          {
+            "artifact": "job-resources-19e27b0fa5164962:v0",
+            "bytes": 24551,
+            "file_count": 4,
+            "state": "COMMITTED",
+            "type": "resource-telemetry"
+          }
+        ],
+        "run_id": "19e27b0fa5164962",
+        "state": "finished",
+        "verified_at": "2026-09-15T20:27:39.138781+00:00"
+      },
+      "protocol_json": "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260916-recovery/evaluations/control-1526-17002/protocol.json",
+      "relative_epoch": 1526,
+      "remote": {
+        "artifacts": [
+          {
+            "artifact": "dapo-evaluation-plan-bff188348e3b4719:v0",
+            "bytes": 76588,
+            "file_count": 7,
+            "state": "COMMITTED",
+            "type": "dapo-evaluation-plan"
+          },
+          {
+            "artifact": "frozen-evaluation-bff188348e3b4719:v0",
+            "bytes": 1368947,
+            "file_count": 17,
+            "state": "COMMITTED",
+            "type": "evaluation"
+          }
+        ],
+        "run_id": "bff188348e3b4719",
+        "state": "finished",
+        "verified_at": "2026-09-15T20:27:32.464808+00:00"
+      },
+      "run_id": "bff188348e3b4719",
+      "status": "completed",
+      "summary_json": "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260916-recovery/evaluations/control-1526-17002/summary.json",
+      "training_run_id": "4742038629e04897"
+    },
+    {
+      "actual_environment_control_frames": 4742576,
+      "checkpoint_sha256": "470fcc9c4988d8637f01764fee484a3d56ac8e39a5c94d031db3bf545c9f976b",
+      "episodes_csv": "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260916-recovery/evaluations/control-3052-17001/episodes.csv",
+      "eval_seed": 17001,
+      "monitor": {
+        "artifacts": [
+          {
+            "artifact": "job-resources-fe489be01b8545f3:v0",
+            "bytes": 25230,
+            "file_count": 4,
+            "state": "COMMITTED",
+            "type": "resource-telemetry"
+          }
+        ],
+        "run_id": "fe489be01b8545f3",
+        "state": "finished",
+        "verified_at": "2026-09-15T20:31:07.899334+00:00"
+      },
+      "protocol_json": "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260916-recovery/evaluations/control-3052-17001/protocol.json",
+      "relative_epoch": 3052,
+      "remote": {
+        "artifacts": [
+          {
+            "artifact": "dapo-evaluation-plan-923601aad51147c2:v0",
+            "bytes": 76589,
+            "file_count": 7,
+            "state": "COMMITTED",
+            "type": "dapo-evaluation-plan"
+          },
+          {
+            "artifact": "frozen-evaluation-923601aad51147c2:v0",
+            "bytes": 1368184,
+            "file_count": 17,
+            "state": "COMMITTED",
+            "type": "evaluation"
+          }
+        ],
+        "run_id": "923601aad51147c2",
+        "state": "finished",
+        "verified_at": "2026-09-15T20:31:06.725448+00:00"
+      },
+      "run_id": "923601aad51147c2",
+      "status": "completed",
+      "summary_json": "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260916-recovery/evaluations/control-3052-17001/summary.json",
+      "training_run_id": "4742038629e04897"
+    },
+    {
+      "actual_environment_control_frames": 5236910,
+      "checkpoint_sha256": "470fcc9c4988d8637f01764fee484a3d56ac8e39a5c94d031db3bf545c9f976b",
+      "episodes_csv": "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260916-recovery/evaluations/control-3052-17002/episodes.csv",
+      "eval_seed": 17002,
+      "monitor": {
+        "artifacts": [
+          {
+            "artifact": "job-resources-0c6b3baf0b664756:v0",
+            "bytes": 23944,
+            "file_count": 4,
+            "state": "COMMITTED",
+            "type": "resource-telemetry"
+          }
+        ],
+        "run_id": "0c6b3baf0b664756",
+        "state": "finished",
+        "verified_at": "2026-09-15T20:34:15.354744+00:00"
+      },
+      "protocol_json": "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260916-recovery/evaluations/control-3052-17002/protocol.json",
+      "relative_epoch": 3052,
+      "remote": {
+        "artifacts": [
+          {
+            "artifact": "dapo-evaluation-plan-d1f5dcbb79364ba1:v0",
+            "bytes": 76589,
+            "file_count": 7,
+            "state": "COMMITTED",
+            "type": "dapo-evaluation-plan"
+          },
+          {
+            "artifact": "frozen-evaluation-d1f5dcbb79364ba1:v0",
+            "bytes": 1368979,
+            "file_count": 17,
+            "state": "COMMITTED",
+            "type": "evaluation"
+          }
+        ],
+        "run_id": "d1f5dcbb79364ba1",
+        "state": "finished",
+        "verified_at": "2026-09-15T20:34:13.996195+00:00"
+      },
+      "run_id": "d1f5dcbb79364ba1",
+      "status": "completed",
+      "summary_json": "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260916-recovery/evaluations/control-3052-17002/summary.json",
+      "training_run_id": "4742038629e04897"
+    },
+    {
+      "actual_environment_control_frames": 4775721,
+      "checkpoint_sha256": "e4c4bac4c8a3feb91e336947cc4436c305f0eb7f9b0c87271e93830d63288314",
+      "episodes_csv": "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260916-recovery/evaluations/control-6104-17001/episodes.csv",
+      "eval_seed": 17001,
+      "monitor": {
+        "artifacts": [
+          {
+            "artifact": "job-resources-5a768531ffb745eb:v0",
+            "bytes": 23727,
+            "file_count": 4,
+            "state": "COMMITTED",
+            "type": "resource-telemetry"
+          }
+        ],
+        "run_id": "5a768531ffb745eb",
+        "state": "finished",
+        "verified_at": "2026-09-15T20:37:17.969577+00:00"
+      },
+      "protocol_json": "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260916-recovery/evaluations/control-6104-17001/protocol.json",
+      "relative_epoch": 6104,
+      "remote": {
+        "artifacts": [
+          {
+            "artifact": "dapo-evaluation-plan-0ab75d0adbf44303:v0",
+            "bytes": 76589,
+            "file_count": 7,
+            "state": "COMMITTED",
+            "type": "dapo-evaluation-plan"
+          },
+          {
+            "artifact": "frozen-evaluation-0ab75d0adbf44303:v0",
+            "bytes": 1368179,
+            "file_count": 17,
+            "state": "COMMITTED",
+            "type": "evaluation"
+          }
+        ],
+        "run_id": "0ab75d0adbf44303",
+        "state": "finished",
+        "verified_at": "2026-09-15T20:37:16.391238+00:00"
+      },
+      "run_id": "0ab75d0adbf44303",
+      "status": "completed",
+      "summary_json": "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260916-recovery/evaluations/control-6104-17001/summary.json",
+      "training_run_id": "4742038629e04897"
+    },
+    {
+      "actual_environment_control_frames": 4556017,
+      "checkpoint_sha256": "e4c4bac4c8a3feb91e336947cc4436c305f0eb7f9b0c87271e93830d63288314",
+      "episodes_csv": "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260916-recovery/evaluations/control-6104-17002/episodes.csv",
+      "eval_seed": 17002,
+      "monitor": {
+        "artifacts": [
+          {
+            "artifact": "job-resources-73b532909e2a42a9:v0",
+            "bytes": 23929,
+            "file_count": 4,
+            "state": "COMMITTED",
+            "type": "resource-telemetry"
+          }
+        ],
+        "run_id": "73b532909e2a42a9",
+        "state": "finished",
+        "verified_at": "2026-09-15T20:40:24.039366+00:00"
+      },
+      "protocol_json": "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260916-recovery/evaluations/control-6104-17002/protocol.json",
+      "relative_epoch": 6104,
+      "remote": {
+        "artifacts": [
+          {
+            "artifact": "dapo-evaluation-plan-5598a30b8961418b:v0",
+            "bytes": 76589,
+            "file_count": 7,
+            "state": "COMMITTED",
+            "type": "dapo-evaluation-plan"
+          },
+          {
+            "artifact": "frozen-evaluation-5598a30b8961418b:v0",
+            "bytes": 1367824,
+            "file_count": 17,
+            "state": "COMMITTED",
+            "type": "evaluation"
+          }
+        ],
+        "run_id": "5598a30b8961418b",
+        "state": "finished",
+        "verified_at": "2026-09-15T20:40:22.840012+00:00"
+      },
+      "run_id": "5598a30b8961418b",
+      "status": "completed",
+      "summary_json": "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260916-recovery/evaluations/control-6104-17002/summary.json",
+      "training_run_id": "4742038629e04897"
+    }
+  ],
+  "reference_training_run_id": "4742038629e04897",
+  "reference_training_summary": "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260914-long-budget/training/control/summary.json",
+  "run_id": "651d846c2f3f4ddd",
+  "startup_required_free_bytes": 17179869184,
+  "train_entry": "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260916-structural-long/support/run_structural_training.py",
+  "train_jobs": {
+    "clip_higher": {
+      "monitor_output": "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260913-audit/monitor-structural-clip_higher",
+      "monitor_run_id": "0067f5ce6540403e",
+      "plan_path": "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260916-structural-long/plans/clip_higher.json",
+      "plan_sha256": "d7f8483e831bf88dc4ee52f2f6a488618488dc886db4ceed0de2891c2ee20b53"
+    },
+    "owned_clip": {
+      "monitor_output": "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260913-audit/monitor-structural-owned_clip",
+      "monitor_run_id": "bafc4e38f34443cd",
+      "plan_path": "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260916-structural-long/plans/owned_clip.json",
+      "plan_sha256": "36b787de0d462d723c97e52fd3403ba60a54367343ebe5a33045e3aa538ae828"
+    }
+  },
+  "training_seed": 36001
+}

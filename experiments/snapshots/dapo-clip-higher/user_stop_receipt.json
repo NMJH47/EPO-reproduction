@@ -1,0 +1,94 @@
+{
+  "requested_at_utc": "2026-09-16T01:19:48.758607+00:00",
+  "reason": "User explicitly requested stop: 1.\u5148\u505c\u6b62",
+  "controller_before": {
+    "pid": 9977,
+    "start_ticks": 270322,
+    "state": "S",
+    "ppid": 9974
+  },
+  "training_before": {
+    "pid": 16780,
+    "start_ticks": 726470,
+    "state": "R",
+    "ppid": 9977
+  },
+  "actions": [
+    {
+      "pid": 9977,
+      "signal": "SIGSTOP",
+      "reason": "Prevent scheduler advancing while stopping current training"
+    },
+    {
+      "pid": 16780,
+      "signal": "SIGINT",
+      "reason": "Interrupt current training and allow existing cleanup"
+    },
+    {
+      "pid": 9977,
+      "signals": [
+        "SIGTERM",
+        "SIGCONT"
+      ],
+      "utc": "2026-09-16T01:20:31.787091+00:00",
+      "reason": "Run existing stop handler to terminate owned child, preserve actual waits and stop queue permanently"
+    }
+  ],
+  "preserve_existing_files": true,
+  "training_actual_wait": {
+    "actual_exit_code_source": "subprocess.wait",
+    "command": [
+      "/home/ubuntu22/anaconda3/envs/epo/bin/python",
+      "-B",
+      "-u",
+      "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260916-structural-long/support/run_structural_training.py",
+      "--plan",
+      "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260916-structural-long/plans/clip_higher.json",
+      "--plan-sha256",
+      "d7f8483e831bf88dc4ee52f2f6a488618488dc886db4ceed0de2891c2ee20b53",
+      "--execute"
+    ],
+    "ended_at_utc": "2026-09-16T01:20:32.424234+00:00",
+    "exit_code": -15,
+    "pid": 16780,
+    "start_ticks": 726470,
+    "started_at_utc": "2026-09-15T22:09:21.068438+00:00",
+    "status": "failed",
+    "uid": 1000
+  },
+  "monitor_actual_wait": {
+    "actual_exit_code_source": "subprocess.wait",
+    "command": [
+      "/home/ubuntu22/anaconda3/envs/epo/bin/python",
+      "-B",
+      "-u",
+      "/home/ubuntu22/EPO-experiments/frontier-20260914/scripts/research/run_dapo_resource_monitor.py",
+      "--plan",
+      "/home/ubuntu22/EPO-experiments/frontier-20260914/artifacts/research/20260916-structural-long/controller/phases/training-clip_higher/monitor_plan.json",
+      "--plan-sha256",
+      "9d7a98402dda81fd3fab2db25bd91fa929aa0733939bad26050a29c78acdcfd4",
+      "--execute"
+    ],
+    "ended_at_utc": "2026-09-16T01:20:37.799752+00:00",
+    "exit_code": 0,
+    "pid": 16781,
+    "start_ticks": 726470,
+    "started_at_utc": "2026-09-15T22:09:21.073808+00:00",
+    "status": "completed",
+    "uid": 1000
+  },
+  "controller_terminal_summary": {
+    "automatic_training_retry": false,
+    "completed_phase_count": 3,
+    "first_error": "KeyboardInterrupt('Stop owned study and preserve actual child wait')",
+    "independent_training_seeds": 1,
+    "reference_training_run_id": "4742038629e04897",
+    "reward_based_stop": false,
+    "status": "failed",
+    "utc": "2026-09-16T01:20:37.800885+00:00"
+  },
+  "verified_at_utc": "2026-09-16T01:21:08.887099+00:00",
+  "gpu_compute_processes_at_verification": [],
+  "status": "training_stopped_queue_in_terminal_cleanup",
+  "scope": "User cancellation, not a completed 2B result; existing saved results retained; no restart authorized."
+}

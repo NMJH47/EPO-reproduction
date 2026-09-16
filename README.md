@@ -81,4 +81,4 @@ Singla, Jayesh and Agarwal, Ananye and Pathak, Deepak. (2024). SAPG: Split and A
 </small></small>
 # 本分支的实验版本
 
-本分支保存历史完整评估最高的frontier 2B实验；源码、配置、checkpoint和结果依据见[实验版本说明](EXPERIMENT_VERSION.md)。
+本分支保存DAPO Clip-Higher长预算实验的实际执行版本；源码、配置、checkpoint和用户停止状态见[实验版本说明](EXPERIMENT_VERSION.md)。

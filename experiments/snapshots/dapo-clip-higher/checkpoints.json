@@ -1,0 +1,26 @@
+[
+  {
+    "epoch": 15565,
+    "frame": 5100339200,
+    "identity": {
+      "md5": "DgN5Ozjwp27mX8j/tlKWFw==",
+      "sha256": "5f8277b53315fdf2d894bcc03616f7987daff04383b7e9259e4f2b024635f797",
+      "size": 252652569
+    },
+    "new_frames": 100270080,
+    "path": "/home/ubuntu22/EPO-experiments/frontier-20260914/runs/118_structural_clip_higher_seed36001_N20480/nn/milestone_new_frames_100270080.pth",
+    "relative_epoch": 306
+  },
+  {
+    "epoch": 16785,
+    "frame": 5500108800,
+    "identity": {
+      "md5": "sRfZlmi7sm05+OeyBsVc4w==",
+      "sha256": "e96c6ca1808f757f6e63013f4a195e888f77c5b123b20848ad763616590e3f79",
+      "size": 252655129
+    },
+    "new_frames": 500039680,
+    "path": "/home/ubuntu22/EPO-experiments/frontier-20260914/runs/118_structural_clip_higher_seed36001_N20480/nn/milestone_new_frames_500039680.pth",
+    "relative_epoch": 1526
+  }
+]
